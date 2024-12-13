@@ -8,16 +8,19 @@
 int main() {
     BenchmarkResults results = {0, 0};
 
-    ByteBench byteBench = ByteBench(1000, 1000);
-    ByteNewBench byteNewBench = ByteNewBench(1000, 1000);
+    ByteBench byteBench = ByteBench();
+    ByteNewBench byteNewBench = ByteNewBench();
     ComplexObjectBench complexObjectBench = ComplexObjectBench();
     AllocatorBench allocatorBench = AllocatorBench();
     AllocatorThreadBench allocatorThreadBench = AllocatorThreadBench();
 
+
+    //Template for all run function arguments (in brackets special cases, depends on realization):
+    // Iterations(num of elements), Size of element(max size of elemnt), additional args(threads, e.t.c)
     std::cout << "-----------------------Byte Bench------------------------------------------\n";
-    byteBench.run();
+    byteBench.run(1000, 1000);
     std::cout << "-----------------------Byte New Bench--------------------------------------\n";
-    byteNewBench.run();
+    byteNewBench.run(1000, 1000);
     std::cout << "-----------------------Complex Object Bench--------------------------------\n";
     complexObjectBench.run(1000, 1000);
     std::cout << "-----------------------Allocator bench-------------------------------------\n";

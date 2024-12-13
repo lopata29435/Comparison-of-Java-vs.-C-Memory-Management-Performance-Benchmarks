@@ -18,7 +18,14 @@ using TimePoint = std::chrono::time_point<Clock>;
 // Class for single-threaded benchmarking.
 class AllocatorBench {
 public:
-    void runBenchmark(size_t iterations, size_t maxItemSize, BenchmarkResults& results) {
+    void run(size_t iterations, size_t maxItemSize, BenchmarkResults& results) {
+        allocatorBench(iterations, maxItemSize, results);
+
+        std::cout << "Time for " << iterations << " allocations of maxItemSize " << maxItemSize << " bytes: " << results.duration << " milliseconds" << std::endl;
+        std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
+    }
+private:
+    void allocatorBench(size_t iterations, size_t maxItemSize, BenchmarkResults& results) {
         // Initialize random number generator.
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -57,13 +64,6 @@ public:
 
         results.duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         results.maxMemory = maxItemSize * sizeof(int) * iterations; // Conditional estimation.
-    }
-
-    void run(size_t iterations, size_t maxItemSize, BenchmarkResults& results) {
-        runBenchmark(iterations, maxItemSize, results);
-
-        std::cout << "Time for " << iterations << " allocations of maxItemSize " << maxItemSize << " bytes: " << results.duration << " milliseconds" << std::endl;
-        std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
     }
 };
 

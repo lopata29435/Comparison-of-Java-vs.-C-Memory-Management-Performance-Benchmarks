@@ -11,35 +11,29 @@ using TimePoint = std::chrono::time_point<Clock>;
 
 class ByteNewBench {
 public:
-    ByteNewBench(size_t allocation_size, size_t iterations)
-        : allocation_size_(allocation_size), iterations_(iterations) {}
-
-    void run() {
+    void run(size_t allocation_size, size_t iterations) {
         // Measure allocation and deallocation time in milliseconds.
-        double allocation_time = measure_allocation();
-        double deallocation_time = measure_deallocation();
+        double allocation_time = measure_allocation(allocation_size, iterations);
+        double deallocation_time = measure_deallocation(allocation_size, iterations);
 
-        std::cout << "Time for " << iterations_ << " allocations of size " << allocation_size_
+        std::cout << "Time for " << iterations << " allocations of size " << allocation_size
                   << " bytes: " << allocation_time << " milliseconds" << std::endl;
-        std::cout << "Time for " << iterations_ << " deallocations: " << deallocation_time << " milliseconds" << std::endl;
+        std::cout << "Time for " << iterations << " deallocations: " << deallocation_time << " milliseconds" << std::endl;
     }
 
 private:
-    size_t allocation_size_;
-    size_t iterations_;
-
     // Function to measure allocation time in milliseconds.
-    double measure_allocation() {
-        std::vector<char*> allocations(iterations_, nullptr);
+    double measure_allocation(size_t allocation_size, size_t iterations) {
+        std::vector<char*> allocations(iterations, nullptr);
 
         TimePoint start = Clock::now();
-        for (size_t i = 0; i < iterations_; ++i) {
-            allocations[i] = new char[allocation_size_];
+        for (size_t i = 0; i < iterations; ++i) {
+            allocations[i] = new char[allocation_size];
         }
         TimePoint end = Clock::now();
 
         // Clean up allocations to avoid memory leak.
-        for (size_t i = 0; i < iterations_; ++i) {
+        for (size_t i = 0; i < iterations; ++i) {
             delete[] allocations[i];
         }
 
@@ -48,14 +42,14 @@ private:
     }
 
     // Function to measure deallocation time in milliseconds.
-    double measure_deallocation() {
-        std::vector<char*> allocations(iterations_, nullptr);
-        for (size_t i = 0; i < iterations_; ++i) {
-            allocations[i] = new char[allocation_size_];
+    double measure_deallocation(size_t allocation_size, size_t iterations) {
+        std::vector<char*> allocations(iterations, nullptr);
+        for (size_t i = 0; i < iterations; ++i) {
+            allocations[i] = new char[allocation_size];
         }
 
         TimePoint start = Clock::now();
-        for (size_t i = 0; i < iterations_; ++i) {
+        for (size_t i = 0; i < iterations; ++i) {
             delete[] allocations[i];
         }
         TimePoint end = Clock::now();

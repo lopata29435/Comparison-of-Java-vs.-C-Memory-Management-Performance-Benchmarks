@@ -24,18 +24,21 @@ private:
     std::unique_ptr<int[]> data_;
 };
 
+
+
 class ComplexObjectBench {
 public:
-    void run(size_t element_count, size_t complex_size) {
-        double primitive_time = measure_allocate_primitive(element_count);
-        std::cout << "Time to allocate and free " << element_count << " primitive integers: "
+    void run(size_t iterations, size_t complex_size) {
+        double primitive_time = measure_allocate_primitive(iterations);
+        std::cout << "Time to allocate and free " << iterations << " primitive integers: "
                   << primitive_time << " milliseconds" << std::endl;
 
-        double complex_time = measure_allocate_complex(element_count, complex_size);
-        std::cout << "Time to allocate and free " << element_count << " complex objects: "
+        double complex_time = measure_allocate_complex(iterations, complex_size);
+        std::cout << "Time to allocate and free " << iterations << " complex objects: "
                   << complex_time << " milliseconds" << std::endl;
     }
 
+private:
     // Measure primitive allocation time in milliseconds.
     double measure_allocate_primitive(size_t count) {
         TimePoint start = Clock::now();

@@ -17,7 +17,17 @@ using TimePoint = std::chrono::time_point<Clock>;
 // Class for multithreaded benchmarking.
 class AllocatorThreadBench {
 public:
-    void runBenchmark(size_t iterations, size_t maxItemSize, size_t threadsNum, BenchmarkResults& results) {
+    void run(size_t iterations, size_t maxItemSize, size_t threadsNum, BenchmarkResults& results) {
+        allocatorThreadBench(iterations, maxItemSize, threadsNum, results);
+
+        // Output results.
+        std::cout << "Threads Num is: " << threadsNum << std::endl;
+        std::cout << "Time for " << iterations << " allocations of maxItemSize" << maxItemSize << " bytes: " << results.duration << " milliseconds" << std::endl;
+        std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
+    }
+
+private:
+    void allocatorThreadBench(size_t iterations, size_t maxItemSize, size_t threadsNum, BenchmarkResults& results) {
         // Create threads and start them.
         std::vector<std::thread> threads;
         for (size_t i = 0; i < threadsNum; ++i) {
@@ -67,15 +77,6 @@ public:
         for (auto& t : threads) {
             t.join();
         }
-    }
-
-    void run(size_t iterations, size_t maxItemSize, size_t threadsNum, BenchmarkResults& results) {
-        runBenchmark(iterations, maxItemSize, threadsNum, results);
-
-        // Output results.
-        std::cout << "Threads Num is: " << threadsNum << std::endl;
-        std::cout << "Time for " << iterations << " allocations of maxItemSize" << maxItemSize << " bytes: " << results.duration << " milliseconds" << std::endl;
-        std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
     }
 
 private:
