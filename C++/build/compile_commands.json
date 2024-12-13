@@ -1,0 +1,8 @@
+[
+{
+  "directory": "D:/Projects/JavaC++ComparisionBench/C++/build",
+  "command": "G:\\Programs\\QT\\Tools\\mingw1120_64\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\P1.dir\\main.cpp.obj -c D:\\Projects\\JavaC++ComparisionBench\\C++\\main.cpp",
+  "file": "D:/Projects/JavaC++ComparisionBench/C++/main.cpp",
+  "output": "CMakeFiles/P1.dir/main.cpp.obj"
+}
+]
