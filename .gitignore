@@ -1,3 +1,7 @@
-/build/
+*.log
+build/
+
+.env
+
 C++/build/
 /.vscode/
