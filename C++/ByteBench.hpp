@@ -37,7 +37,7 @@ private:
         for (size_t i = 0; i < iterations_; ++i) {
             allocations[i] = malloc(allocation_size_);
             if (!allocations[i]) {
-                throw std::runtime_error("Allocation failed at iteration: " + std::to_string(i))_;
+                throw std::runtime_error("Allocation failed at iteration: " + std::to_string(i));
             }
         }
         TimePoint end = Clock::now();
