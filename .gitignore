@@ -4,4 +4,4 @@ build/
 .env
 
 C++/build/
-/.vscode/
+C++/.vscode/
