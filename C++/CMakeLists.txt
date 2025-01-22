@@ -14,4 +14,7 @@ add_executable(P1   main.cpp
                     ComplexObjectBench.hpp
                     AllocatorThreadBench.hpp
                     AllocatorBench.hpp
+                    MemoryAccessBench.hpp
+                    MemoryFragmentationBench.hpp
+                    RecursiveAllocationBench.hpp
                     )
