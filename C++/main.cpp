@@ -163,7 +163,7 @@ int main() {
     auto& recursiveAllocationBenchConfig = configs["RecursiveAllocationBench"];
 
     std::vector<size_t> allocationSizes;
-    std::vector<size_t> accessIndices = loadAccessIndicesFromFile("../../data/acces_indices.txt");
+    std::vector<size_t> accessIndices;
     std::vector<bool> freePatterns;
 
     //Template for all run function arguments (in brackets special cases, depends on realization):
