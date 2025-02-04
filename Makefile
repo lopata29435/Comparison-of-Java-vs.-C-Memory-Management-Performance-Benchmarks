@@ -1,13 +1,14 @@
 REPO_DIR := Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks
-CPP_DIR := $(REPO_DIR)/C++
-JAVA_DIR := $(REPO_DIR)/Java
+CPP_DIR := C++
+JAVA_DIR := Java
 BUILD_DIR := $(CPP_DIR)/build
+JAVA_JAR := $(JAVA_DIR)/build/libs/benchmark.jar
+BENCHMARK_LOG := benchmark_results.txt
 
-REQUIRED_CXX_VERSION := 13.1.0
+REQUIRED_CLANG_VERSION := 18.1.3
 REQUIRED_JAVA_VERSION := 21
-REQUIRED_GRADLE_VERSION := 8.12.1
+REQUIRED_GRADLE_VERSION := 8.12
 REQUIRED_CMAKE_VERSION := 3.31.5
-REQUIRED_PYTHON_VERSION := 3.13.1
 
 # Цель по умолчанию
 build: check_dependencies build_cpp build_java
@@ -15,17 +16,17 @@ build: check_dependencies build_cpp build_java
 # Проверка зависимостей
 check_dependencies:
 	@echo "Checking dependencies..."
-	@echo "Checking C++ compiler (g++)..."
-	@if ! command -v g++ > /dev/null; then \
-		echo "Error: g++ is not installed."; \
+	@echo "Checking C++ compiler (clang++)..."
+	@if ! command -v clang++ > /dev/null; then \
+		echo "Error: clang++ is not installed."; \
 		exit 1; \
 	else \
-		CXX_VERSION=$$(g++ --version | head -n 1 | awk '{print $$3}'); \
-		if [ "$$CXX_VERSION" != "$(REQUIRED_CXX_VERSION)" ]; then \
-			echo "Error: g++ version $$CXX_VERSION is installed, but version $(REQUIRED_CXX_VERSION) is required."; \
+		CLANG_VERSION=$$(clang++ --version | head -n 1 | sed 's/.*version \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/'); \
+		if [ "$$CLANG_VERSION" != "$(REQUIRED_CLANG_VERSION)" ]; then \
+			echo "Error: clang++ version $$CLANG_VERSION is installed, but version $(REQUIRED_CLANG_VERSION) is required."; \
 			exit 1; \
 		else \
-			echo "g++ version $$CXX_VERSION is OK."; \
+			echo "clang++ version $$CLANG_VERSION is OK."; \
 		fi; \
 	fi
 
@@ -34,7 +35,7 @@ check_dependencies:
 		echo "Error: java is not installed."; \
 		exit 1; \
 	else \
-		JAVA_VERSION=$$(java --version | head -n 1 | awk '{print $$2}'); \
+		JAVA_VERSION=$$(java --version | head -n 1 | awk '{print $$2}' | cut -d '.' -f 1); \
 		if [ "$$JAVA_VERSION" != "$(REQUIRED_JAVA_VERSION)" ]; then \
 			echo "Error: Java version $$JAVA_VERSION is installed, but version $(REQUIRED_JAVA_VERSION) is required."; \
 			exit 1; \
@@ -77,8 +78,12 @@ check_dependencies:
 		exit 1; \
 	else \
 		PYTHON_VERSION=$$(python3 --version | awk '{print $$2}'); \
-		if [ "$$PYTHON_VERSION" != "$(REQUIRED_PYTHON_VERSION)" ]; then \
-			echo "Error: Python version $$PYTHON_VERSION is installed, but version $(REQUIRED_PYTHON_VERSION) is required."; \
+		PYTHON_MAJOR=$$(echo $$PYTHON_VERSION | cut -d'.' -f1); \
+		PYTHON_MINOR=$$(echo $$PYTHON_VERSION | cut -d'.' -f2); \
+		REQUIRED_MAJOR=3; \
+		REQUIRED_MINOR=12; \
+		if [ $$PYTHON_MAJOR -lt $$REQUIRED_MAJOR ] || { [ $$PYTHON_MAJOR -eq $$REQUIRED_MAJOR ] && [ $$PYTHON_MINOR -lt $$REQUIRED_MINOR ]; }; then \
+			echo "Error: Python version $$PYTHON_VERSION is installed, but version $$REQUIRED_MAJOR.$$REQUIRED_MINOR or higher is required."; \
 			exit 1; \
 		else \
 			echo "Python version $$PYTHON_VERSION is OK."; \
@@ -98,15 +103,26 @@ build_java:
 	@echo "Building Java part..."
 	@cd $(JAVA_DIR) && gradle build
 
+# Запуск бенчмарков
+run: build
+	@echo "Running C++ benchmark..." | tee $(BENCHMARK_LOG)
+	@cd $(BUILD_DIR) && ./P1 | tee -a $(BENCHMARK_LOG)
+
+	@echo "\nRunning Java benchmark..." | tee -a $(BENCHMARK_LOG)
+	@java -jar $(JAVA_JAR) | tee -a $(BENCHMARK_LOG)
+
+	@echo "\nBenchmarks completed. Results saved in $(BENCHMARK_LOG)."
+
 # Очистка
 clean:
 	@echo "Cleaning up..."
 	@rm -rf $(BUILD_DIR)
 	@cd $(JAVA_DIR) && gradle clean
+	@rm -f $(BENCHMARK_LOG)
 
 # Полная очистка (включая репозиторий)
 distclean: clean
 	@echo "Removing repository..."
 	@rm -rf $(REPO_DIR)
 
-.PHONY: build check_dependencies build_cpp build_java clean distclean
+.PHONY: build check_dependencies build_cpp build_java run clean distclean

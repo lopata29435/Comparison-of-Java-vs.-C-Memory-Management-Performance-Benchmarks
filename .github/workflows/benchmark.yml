@@ -1,0 +1,110 @@
+name: Benchmark CI
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create and switch to benchmark-results branch
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git checkout -b benchmark-results
+        
+      - name: Set up Python
+        run: |
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt-get update
+          sudo apt-get install -y python3.12
+          sudo apt-get install -y python3-pip
+          
+      - name: Set up Java 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      
+      - name: Install Gradle
+        run: |
+          wget https://services.gradle.org/distributions/gradle-8.12.1-bin.zip
+          unzip gradle-8.12.1-bin.zip
+          sudo mv gradle-8.12.1 /opt/gradle-8.12.1
+          echo "export PATH=/opt/gradle-8.12.1/bin:$PATH" >> ~/.bashrc
+          source ~/.bashrc
+          
+      - name: Set up C++ environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0-rc2/LLVM-20.1.0-rc2-Linux-X64.tar.xz
+          tar -xvf LLVM-20.1.0-rc2-Linux-X64.tar.xz
+          sudo mv LLVM-20.1.0-rc2-Linux-X64 /opt/llvm-20.1.0
+          echo 'export PATH=/opt/llvm-20.1.0/bin:$PATH' >> ~/.bashrc
+          echo 'export LD_LIBRARY_PATH=/opt/llvm-20.1.0/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+          source ~/.bashrc || true
+
+      - name: Set up CMake
+        run: |
+          wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz
+          tar -xf cmake-3.31.5-linux-x86_64.tar.gz
+          sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
+          echo "export PATH=/opt/cmake-3.31.5/bin:$PATH" >> ~/.bashrc
+          source ~/.bashrc
+
+      - name: Run Python script
+        run: |
+          python3 dataGen.py --max-power 20
+      
+      - name: Build C++ project
+        run: |
+          mkdir -p C++/build
+          cd C++/build
+          cmake ..
+          make
+
+      - name: Run C++ benchmarks and capture output
+        run: |
+          cd C++/build
+          ./P1 > benchmark_results_cpp.txt
+        
+      - name: Run Java benchmarks
+        run: |
+          cd Java/app
+          gradle build
+          java -cp build/libs/app.jar org.example.BenchmarkRunner > benchmark_results_java.txt
+  
+      - name: Update README with benchmark results
+        run: |
+          RESULT_CPP=$(cat C++/build/benchmark_results_cpp.txt)
+          RESULT_JAVA=$(cat Java/app/benchmark_results_java.txt)
+          
+          NEW_RESULTS="## Latest Benchmarks results\n\`\`\`\n### C++ Benchmark Results\n$RESULT_CPP\n\n### Java Benchmark Results\n$RESULT_JAVA\n\`\`\`"
+          
+          sed -i '/## Latest Benchmarks results/,/\`\`\`/d' README.md
+          
+          echo -e "$NEW_RESULTS" >> README.md
+          
+          cat README.md
+          
+      - name: Commit changes
+        run: |
+          git diff README.md
+          git add README.md
+          git commit -m "Update README with benchmark results"
+      
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push origin benchmark-results || echo "No changes to commit"
