@@ -8,6 +8,10 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
+find_package(Threads REQUIRED)
+
 add_executable(P1   main.cpp
                     ByteBench.hpp
                     ByteNewBench.hpp
@@ -18,3 +22,5 @@ add_executable(P1   main.cpp
                     MemoryFragmentationBench.hpp
                     RecursiveAllocationBench.hpp
                     )
+                    
+target_link_libraries(P1 PRIVATE Threads::Threads)

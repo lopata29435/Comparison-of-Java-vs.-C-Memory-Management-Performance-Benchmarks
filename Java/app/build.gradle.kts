@@ -34,3 +34,11 @@ application {
     // Define the main class for the application.
     mainClass = "org.example.BenchmarkRunner"
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "org.example.BenchmarkRunner"
+        )
+    }
+}

@@ -4,31 +4,24 @@ This repository contains a set of benchmarks that are identical in both language
 
 ## Requirements
 
-Before you start, make sure you have the following tools installed:
-- **C++** compiler (e.g. `g++`, `clang++`)
-- **CMake** (for building the project)
-- **Python** (for generating input data files)
+Before you start, make sure you have the following tools installed.
 
-## Installation C++ Bench
+In brackets are the versions on which I built all this, so everything works exactly on them:
+- **C++ Clang compiler** (18.1.3)
+- **Java SDK** (JDK21)
+- **Gradle** (8.12) for building the Java part of the project
+- **CMake** (3.31.5) for building the C++ part of the project
+- **Python** (3.12.1 or higher, will not affect the benchmark results) for generating input data files
 
+## Installation Benchmarks
 ### Step 1: Clone a repository
 ```bash
 git clone https://github.com/lopata29435/Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks.git
-cd Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks/C++
+cd Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks/
 ```
-### Step 2: Step 2: Build the project
-1. Create a directory for the build:
+### Step 2: Build Makefile
 ```bash
-mkdir build
-cd build
-```
-2. Execute the CMake command to configure the project:
-```bash
-cmake ..
-```
-3. Assemble the project:
-```bash
-cmake --build .
+make build
 ```
 
 ## Running benchmarks
@@ -82,17 +75,16 @@ Use the provided Python script to generate these files based on the configuratio
 
 Run the Python script:
 ```bash
-    python3 dataGen.py
+python3 dataGen.py
 ```
 You can also specify the --max-power parameter. This parameter sets the limit of the maximum size of allocated memory in randomly generated data. If for example --max-power 10, the maximum size will be 2^10 bytes. default value is 12.
 ```bash
-    python3 dataGen.py --max-power 10
+python3 dataGen.py --max-power 10
 ```
 
-### Step 3: Run C++ benchmark
+### Step 3: Run benchmarks
 ```bash
-cd C++/build
-./P1
+make run
 ```
 
 ## Configuration File Details
@@ -159,3 +151,54 @@ Benchmark for testing recursive memory allocation. Each iteration performs recur
 
 ### MemoryAccessBench
 Benchmark for measuring memory access performance. Each access is performed on random indices in an array with a specified number of elements.
+
+## Latest Benchmarks results
+
+### C++ Benchmark Results
+```
+-----------------------Byte Bench------------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.42046 milliseconds
+Time for 1000 deallocations: 0.070141 milliseconds
+-----------------------Byte New Bench--------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.321254 milliseconds
+Time for 1000 deallocations: 0.070733 milliseconds
+-----------------------Complex Object Bench--------------------------------
+Time to allocate and free 1000 primitive integers: 4e-05 milliseconds
+Time to allocate and free 1000 complex objects: 0.196209 milliseconds
+-----------------------Allocator bench-------------------------------------
+Time for 10 allocations: 1 milliseconds
+Max memory used: 1230848 bytes
+-----------------------Allocator Thread Bench------------------------------
+Threads Num is: 20
+Time for 10 allocations: 61 milliseconds
+Max memory used: 307712 bytes
+-----------------------Memory Fragmentation Bench--------------------------
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.009608 milliseconds
+-----------------------Recursive Allocation Bench--------------------------
+Recursive allocation test with depth 1000 and allocation size 128 bytes: 3e-05 milliseconds
+-----------------------Memory Access Bench---------------------------------
+Memory access test for 10 accesses in memory block of size 4000 bytes: 6e-05 milliseconds
+```
+
+### Java Benchmark Results
+```
+-----------------------Byte Bench------------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.0 milliseconds
+Time for 1000 deallocations: 0.0 milliseconds
+-----------------------Complex Object Bench--------------------------------
+Time to allocate and free 1000 primitive integers: 0.0 milliseconds
+Time to allocate and free 1000 complex objects: 3.0 milliseconds
+-----------------------Allocator Bench-------------------------------------
+Time for 10 allocations: 3 milliseconds
+Max memory used: 1230848 bytes
+-----------------------Allocator Thread Bench------------------------------
+Threads Num is: 20
+Time for 10 allocations: 914 milliseconds
+Max memory used: 307712 bytes
+-----------------------Memory Fragmentation Bench--------------------------
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.094318 milliseconds
+-----------------------Recursive Allocation Bench--------------------------
+Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.277823 milliseconds
+-----------------------Memory Access Bench---------------------------------
+Memory access test for 10 accesses in memory block of size 4000 bytes: 0.008726 milliseconds
+```
