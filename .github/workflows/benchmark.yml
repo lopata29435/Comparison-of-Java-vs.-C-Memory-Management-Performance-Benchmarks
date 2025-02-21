@@ -134,6 +134,7 @@ jobs:
           branch: ${{ env.BRANCH_NAME }}
           commit-message: 'Update README with benchmark results'
           delete-branch: false
+          no-rebase: true
           title: "Update README with benchmark results"
           assignees: lopata29435
           base: master
