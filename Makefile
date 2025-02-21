@@ -2,7 +2,6 @@ REPO_DIR := Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks
 CPP_DIR := C++
 JAVA_DIR := Java
 BUILD_DIR := $(CPP_DIR)/build
-JAVA_JAR := $(JAVA_DIR)/app/build/libs/app.jar
 BENCHMARK_LOG := benchmark_results.txt
 
 REQUIRED_CLANG_VERSION := 18.1.3
@@ -111,7 +110,6 @@ run:
 
 	@echo "\nRunning Java benchmark..." | tee -a $(BENCHMARK_LOG)
 	@cd Java/app && java -cp build/libs/app.jar org.example.BenchmarkRunner | tee -a $(BENCHMARK_LOG)
-
 	@echo "\nBenchmarks completed. Results saved in $(BENCHMARK_LOG)."
 
 # Очистка
