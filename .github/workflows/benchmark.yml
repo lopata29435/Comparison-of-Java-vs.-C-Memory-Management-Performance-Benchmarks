@@ -23,7 +23,6 @@ jobs:
           BRANCH_NAME="benchmark-results-$(date +%s)"
           git checkout -b $BRANCH_NAME
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-          git push --set-upstream origin $BRANCH_NAME
 
         
       - name: Set up Python
@@ -101,40 +100,32 @@ jobs:
           echo -e "$NEW_RESULTS" >> README.md
           
           cat README.md
-
-      - name: Sync branch with remote
-        run: |
-          git fetch origin $BRANCH_NAME
-          git checkout $BRANCH_NAME
-          git pull origin $BRANCH_NAME
-
-      - name: Check for changes
-        run: |
-          if git diff --quiet master...$BRANCH_NAME; then
-            echo "No changes to commit"
-            exit 0
-          fi
           
       - name: Commit changes
         run: |
           git diff README.md
           git add README.md
-          git commit -m "Update README with benchmark results" || echo "No changes to commit"
-          
+          git commit -m "Update README with benchmark results"
+      
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git push origin $BRANCH_NAME
+          git push --set-upstream origin $BRANCH_NAME
           
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: actions/github-script@v7
         with:
-          branch: ${{ env.BRANCH_NAME }}
-          commit-message: 'Update README with benchmark results'
-          delete-branch: false
-          no-rebase: true
-          title: "Update README with benchmark results"
-          assignees: lopata29435
-          base: master
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Update README with benchmark results",
+              head: "${{ env.BRANCH_NAME }}",
+              base: "master",
+              body: "This PR updates the README with the latest benchmark results.",
+              assignees: ["lopata29435"]
+            });
+            console.log(`Pull request created: ${pullRequest.html_url}`);
