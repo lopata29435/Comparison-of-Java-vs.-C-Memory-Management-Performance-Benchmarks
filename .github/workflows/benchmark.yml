@@ -19,9 +19,12 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git fetch origin benchmark_results || git checkout -b benchmark_results
-          git checkout benchmark_results
-          git pull origin benchmark_results
+          if git ls-remote --exit-code origin benchmark_results; then
+            git checkout benchmark_results
+            git pull origin benchmark_results
+          else
+            git checkout -b benchmark_results
+          fi
 
         
       - name: Set up Python
