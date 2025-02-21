@@ -91,15 +91,11 @@ jobs:
           RESULT_CPP=$(cat C++/build/benchmark_results_cpp.txt)
           RESULT_JAVA=$(cat Java/app/benchmark_results_java.txt)
           
-          NEW_RESULTS="## Latest Benchmarks results\n\`\`\`\n### C++ Benchmark Results\n$RESULT_CPP\n\n### Java Benchmark Results\n$RESULT_JAVA\n\`\`\`"
+          NEW_RESULTS="## Latest Benchmarks results\n\n### C++ Benchmark Results\n$RESULT_CPP\n\n### Java Benchmark Results\n$RESULT_JAVA\n"
           
-          # Удаляем весь блок, начиная с "## Latest Benchmarks results" до следующего "```"
-          sed -i '/## Latest Benchmarks results/,/\`\`\`/{//!d;};/## Latest Benchmarks results/d' README.md
+          sed -i '/## Latest Benchmarks results/,$d' README.md  
           
-          # Добавляем новый блок с результатами
           echo -e "$NEW_RESULTS" >> README.md
-          
-          cat README.md
           
       - name: Commit changes
         run: |
