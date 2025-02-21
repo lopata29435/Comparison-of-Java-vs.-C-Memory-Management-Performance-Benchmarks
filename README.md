@@ -155,47 +155,50 @@ Benchmark for measuring memory access performance. Each access is performed on r
 ## Latest Benchmarks results
 
 ### C++ Benchmark Results
+```
 -----------------------Byte Bench------------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.4061 milliseconds
-Time for 1000 deallocations: 0.071284 milliseconds
+Time for 1000 allocations of size 1000 bytes: 0.42046 milliseconds
+Time for 1000 deallocations: 0.070141 milliseconds
 -----------------------Byte New Bench--------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.336269 milliseconds
-Time for 1000 deallocations: 0.071493 milliseconds
+Time for 1000 allocations of size 1000 bytes: 0.321254 milliseconds
+Time for 1000 deallocations: 0.070733 milliseconds
 -----------------------Complex Object Bench--------------------------------
-Time to allocate and free 1000 primitive integers: 3e-05 milliseconds
-Time to allocate and free 1000 complex objects: 0.196717 milliseconds
+Time to allocate and free 1000 primitive integers: 4e-05 milliseconds
+Time to allocate and free 1000 complex objects: 0.196209 milliseconds
 -----------------------Allocator bench-------------------------------------
-Time for 10 allocations: 2 milliseconds
-Max memory used: 9535488 bytes
+Time for 10 allocations: 1 milliseconds
+Max memory used: 1230848 bytes
 -----------------------Allocator Thread Bench------------------------------
 Threads Num is: 20
-Time for 10 allocations: 23 milliseconds
-Max memory used: 1249280 bytes
+Time for 10 allocations: 61 milliseconds
+Max memory used: 307712 bytes
 -----------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.006612 milliseconds
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.009608 milliseconds
 -----------------------Recursive Allocation Bench--------------------------
 Recursive allocation test with depth 1000 and allocation size 128 bytes: 3e-05 milliseconds
 -----------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 4e-05 milliseconds
+Memory access test for 10 accesses in memory block of size 4000 bytes: 6e-05 milliseconds
+```
 
 ### Java Benchmark Results
+```
 -----------------------Byte Bench------------------------------------------
 Time for 1000 allocations of size 1000 bytes: 0.0 milliseconds
 Time for 1000 deallocations: 0.0 milliseconds
 -----------------------Complex Object Bench--------------------------------
 Time to allocate and free 1000 primitive integers: 0.0 milliseconds
-Time to allocate and free 1000 complex objects: 5.0 milliseconds
+Time to allocate and free 1000 complex objects: 3.0 milliseconds
 -----------------------Allocator Bench-------------------------------------
-Time for 10 allocations: 13 milliseconds
-Max memory used: 9535488 bytes
+Time for 10 allocations: 3 milliseconds
+Max memory used: 1230848 bytes
 -----------------------Allocator Thread Bench------------------------------
 Threads Num is: 20
-Time for 10 allocations: 1389 milliseconds
-Max memory used: 1249280 bytes
+Time for 10 allocations: 914 milliseconds
+Max memory used: 307712 bytes
 -----------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.036288 milliseconds
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.094318 milliseconds
 -----------------------Recursive Allocation Bench--------------------------
-Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.278651 milliseconds
+Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.277823 milliseconds
 -----------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 0.011522 milliseconds
-
+Memory access test for 10 accesses in memory block of size 4000 bytes: 0.008726 milliseconds
+```
