@@ -23,6 +23,7 @@ jobs:
           BRANCH_NAME="benchmark-results-$(date +%s)"
           git checkout -b $BRANCH_NAME
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          git push --set-upstream origin $BRANCH_NAME
 
         
       - name: Set up Python
@@ -100,30 +101,31 @@ jobs:
           echo -e "$NEW_RESULTS" >> README.md
           
           cat README.md
+
+      - name: Sync branch with remote
+        run: |
+          git fetch origin $BRANCH_NAME
+          git checkout $BRANCH_NAME
+          git pull origin $BRANCH_NAME
+
+      - name: Check for changes
+        run: |
+          if git diff --quiet master...$BRANCH_NAME; then
+            echo "No changes to commit"
+            exit 0
+          fi
           
       - name: Commit changes
         run: |
           git diff README.md
           git add README.md
-          git commit -m "Update README with benchmark results"
-
-      - name: Sync branch with remote
-        run: |
-          git fetch origin benchmark-results-1740134145
-          git checkout benchmark-results-1740134145
-          git pull origin benchmark-results-1740134145
-
-      - name: Check for changes
-        run: |
-          if git diff --quiet master...benchmark-results-1740134145; then
-            echo "No changes to commit"
-            exit 0
-          fi
+          git commit -m "Update README with benchmark results" || echo "No changes to commit"
+          
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git push --set-upstream origin $BRANCH_NAME
+          git push origin $BRANCH_NAME
           
 
       - name: Create Pull Request
