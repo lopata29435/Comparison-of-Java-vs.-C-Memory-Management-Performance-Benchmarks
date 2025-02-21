@@ -241,8 +241,6 @@ Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.23795
 -----------------------Memory Access Bench---------------------------------
 Memory access test for 10 accesses in memory block of size 4000 bytes: 0.012554 milliseconds
 ```
-## Latest Benchmarks results
-```
 ### C++ Benchmark Results
 -----------------------Byte Bench------------------------------------------
 Time for 1000 allocations of size 1000 bytes: 0.552531 milliseconds
@@ -287,4 +285,51 @@ Fragmentation test for 10 allocations with predefined sizes and free patterns: 0
 Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.250797 milliseconds
 -----------------------Memory Access Bench---------------------------------
 Memory access test for 10 accesses in memory block of size 4000 bytes: 0.012152 milliseconds
+```
+## Latest Benchmarks results
+```
+### C++ Benchmark Results
+-----------------------Byte Bench------------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.389867 milliseconds
+Time for 1000 deallocations: 0.070652 milliseconds
+-----------------------Byte New Bench--------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.316059 milliseconds
+Time for 1000 deallocations: 0.091221 milliseconds
+-----------------------Complex Object Bench--------------------------------
+Time to allocate and free 1000 primitive integers: 3e-05 milliseconds
+Time to allocate and free 1000 complex objects: 0.196737 milliseconds
+-----------------------Allocator bench-------------------------------------
+Time for 10 allocations: 0 milliseconds
+Max memory used: 30208 bytes
+-----------------------Allocator Thread Bench------------------------------
+Threads Num is: 20
+Time for 10 allocations: 46 milliseconds
+Max memory used: 1278464 bytes
+-----------------------Memory Fragmentation Bench--------------------------
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.001031 milliseconds
+-----------------------Recursive Allocation Bench--------------------------
+Recursive allocation test with depth 1000 and allocation size 128 bytes: 2e-05 milliseconds
+-----------------------Memory Access Bench---------------------------------
+Memory access test for 10 accesses in memory block of size 4000 bytes: 6.1e-05 milliseconds
+
+### Java Benchmark Results
+-----------------------Byte Bench------------------------------------------
+Time for 1000 allocations of size 1000 bytes: 0.0 milliseconds
+Time for 1000 deallocations: 0.0 milliseconds
+-----------------------Complex Object Bench--------------------------------
+Time to allocate and free 1000 primitive integers: 0.0 milliseconds
+Time to allocate and free 1000 complex objects: 5.0 milliseconds
+-----------------------Allocator Bench-------------------------------------
+Time for 10 allocations: 2 milliseconds
+Max memory used: 30208 bytes
+-----------------------Allocator Thread Bench------------------------------
+Threads Num is: 20
+Time for 10 allocations: 2846 milliseconds
+Max memory used: 1278464 bytes
+-----------------------Memory Fragmentation Bench--------------------------
+Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.027401 milliseconds
+-----------------------Recursive Allocation Bench--------------------------
+Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.237313 milliseconds
+-----------------------Memory Access Bench---------------------------------
+Memory access test for 10 accesses in memory block of size 4000 bytes: 0.011231 milliseconds
 ```
