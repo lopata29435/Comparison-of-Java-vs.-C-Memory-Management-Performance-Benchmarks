@@ -106,7 +106,19 @@ jobs:
           git diff README.md
           git add README.md
           git commit -m "Update README with benchmark results"
-      
+
+      - name: Sync branch with remote
+        run: |
+          git fetch origin benchmark-results-1740134145
+          git checkout benchmark-results-1740134145
+          git pull origin benchmark-results-1740134145
+
+      - name: Check for changes
+        run: |
+          if git diff --quiet master...benchmark-results-1740134145; then
+            echo "No changes to commit"
+            exit 0
+          fi
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
