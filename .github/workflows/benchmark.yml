@@ -91,7 +91,7 @@ jobs:
           RESULT_CPP=$(cat C++/build/benchmark_results_cpp.txt)
           RESULT_JAVA=$(cat Java/app/benchmark_results_java.txt)
           
-          NEW_RESULTS="## Latest Benchmarks results\n\nC++ Benchmark Results\n\\\\n$RESULT_CPP\n\\\\n\n Java Benchmark Results\n\\\\n$RESULT_JAVA\n\\\"
+          NEW_RESULTS="## Latest Benchmarks results\n\n### C++ Benchmark Results\n\`\`\`\n$RESULT_CPP\n\`\`\`\n\n### Java Benchmark Results\n\`\`\`\n$RESULT_JAVA\n\`\`\`"
           
           sed -i '/## Latest Benchmarks results/,$d' README.md  
           
