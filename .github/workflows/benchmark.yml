@@ -109,7 +109,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git push -u origin $BRANCH_NAME || echo "No changes to commit"
+          git push --set-upstream origin $BRANCH_NAME || echo "No changes to commit"
+          
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
