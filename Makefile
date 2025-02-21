@@ -104,7 +104,6 @@ build_java:
 
 # Запуск бенчмарков
 run:
-	@python3 dataGen.py
 	@echo "Running C++ benchmark..." | tee $(BENCHMARK_LOG)
 	@cd $(BUILD_DIR) && ./P1 | tee -a $(BENCHMARK_LOG)
 
