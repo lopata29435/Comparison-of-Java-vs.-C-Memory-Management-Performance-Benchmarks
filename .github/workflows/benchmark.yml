@@ -19,9 +19,9 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git checkout -b benchmark_results
-          git branch --set-upstream-to=origin/benchmark_results
-          git pull
+          git fetch origin benchmark_results || git checkout -b benchmark_results
+          git checkout benchmark_results
+          git pull origin benchmark_results
 
         
       - name: Set up Python
