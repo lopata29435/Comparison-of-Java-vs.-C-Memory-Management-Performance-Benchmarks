@@ -19,9 +19,8 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git fetch origin benchmark-results || echo "Branch benchmark-results does not exist yet"
-          git checkout benchmark-results || git checkout -b benchmark-results
-          git pull origin benchmark-results || echo "No existing branch to pull from"
+          BRANCH_NAME="benchmark-results-$(date +%s)"
+          git checkout -b $BRANCH_NAME
 
         
       - name: Set up Python
@@ -115,9 +114,9 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: benchmark-results
+          branch: $BRANCH_NAME
           commit-message: 'Update README with benchmark results'
-          delete-branch: true
+          delete-branch: false
           title: "Update README with benchmark results"
           assignees: lopata29435
           base: master
