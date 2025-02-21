@@ -152,52 +152,6 @@ Benchmark for testing recursive memory allocation. Each iteration performs recur
 ### MemoryAccessBench
 Benchmark for measuring memory access performance. Each access is performed on random indices in an array with a specified number of elements.
 
-```
- C++ Benchmark Results
------------------------Byte Bench------------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.389591 milliseconds
-Time for 1000 deallocations: 0.072214 milliseconds
------------------------Byte New Bench--------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.342054 milliseconds
-Time for 1000 deallocations: 0.071012 milliseconds
------------------------Complex Object Bench--------------------------------
-Time to allocate and free 1000 primitive integers: 3e-05 milliseconds
-Time to allocate and free 1000 complex objects: 0.195802 milliseconds
------------------------Allocator bench-------------------------------------
-Time for 10 allocations: 0 milliseconds
-Max memory used: 1058304 bytes
------------------------Allocator Thread Bench------------------------------
-Threads Num is: 20
-Time for 10 allocations: 123 milliseconds
-Max memory used: 6300160 bytes
------------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.012343 milliseconds
------------------------Recursive Allocation Bench--------------------------
-Recursive allocation test with depth 1000 and allocation size 128 bytes: 3e-05 milliseconds
------------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 7e-05 milliseconds
-
- Java Benchmark Results
------------------------Byte Bench------------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.0 milliseconds
-Time for 1000 deallocations: 0.0 milliseconds
------------------------Complex Object Bench--------------------------------
-Time to allocate and free 1000 primitive integers: 0.0 milliseconds
-Time to allocate and free 1000 complex objects: 5.0 milliseconds
------------------------Allocator Bench-------------------------------------
-Time for 10 allocations: 2 milliseconds
-Max memory used: 1058304 bytes
------------------------Allocator Thread Bench------------------------------
-Threads Num is: 20
-Time for 10 allocations: 1711 milliseconds
-Max memory used: 6300160 bytes
------------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.276011 milliseconds
------------------------Recursive Allocation Bench--------------------------
-Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.258389 milliseconds
------------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 0.014417 milliseconds
-```
 ## Latest Benchmarks results
 ```
 ### C++ Benchmark Results
