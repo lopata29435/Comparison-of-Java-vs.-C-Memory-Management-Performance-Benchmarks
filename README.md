@@ -77,7 +77,7 @@ Run the Python script:
 ```bash
 python3 dataGen.py
 ```
-You can also specify the --max-power parameter. This parameter sets the limit of the maximum size of allocated memory in randomly generated data. If for example --max-power 10, the maximum size will be 2^10 bytes. default value is 12.
+You can also specify the --max-power parameter. This parameter sets the limit of the maximum size of allocated memory in randomly generated data. If for example --max-power 10, the maximum size will be 2^10 bytes. default value is 12. I strongly advise against making this value greater than 20.
 ```bash
 python3 dataGen.py --max-power 10
 ```
