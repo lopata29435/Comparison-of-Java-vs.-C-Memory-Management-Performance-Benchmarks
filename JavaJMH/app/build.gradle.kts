@@ -29,13 +29,13 @@ java {
 }
 
 application {
-    mainClass.set("org.example.BenchmarkRunner")
+    mainClass = "org.example.BenchmarkRunner"
 }
 
-application {
-    applicationDefaultJvmArgs = listOf("-Dfile.encoding=UTF-8")
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "org.example.BenchmarkRunner"
+        )
+    }
 }
