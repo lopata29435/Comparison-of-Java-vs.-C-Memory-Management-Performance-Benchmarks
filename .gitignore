@@ -7,6 +7,16 @@ C++/build/
 C++/.vscode/
 data/
 Java/app/benchmark_results_java.txt
+JavaJMH/app/benchmark_results_javajmh.txt
+C++/build/benchmark_results_cpp.txt
 LLVM-20.1.0-rc2-Linux-X64.tar.xz
 cmake-3.31.5-linux-x86_64.tar.gz
 gradle-8.12.1-bin.zip
+benchmark_results.txt
+JavaJMH/app/AllocatorBench_results.txt
+JavaJMH/app/ByteBenchmark_results.txt
+JavaJMH/app/ComplexObjectBenchmark_results.txt
+JavaJMH/app/MemoryAccessBench_results.txt
+JavaJMH/app/MemoryFragmentationBench_results.txt
+JavaJMH/app/RecursiveAllocationBenchmark_results.txt
+JavaJMH/app/AllocatorThreadBench_results.txt

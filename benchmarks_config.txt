@@ -1,14 +1,14 @@
 [ByteBench]
-iterations=1000
+iterations=100000
 allocation_size=1000
 
 [ByteNewBench]
-iterations=1000
-allocation_size=1000
+iterations=100000
+allocation_size=100000
 
 [ComplexObjectBench]
-iterations=1000
-element_count=1000
+iterations=100000
+element_count=100000
 
 [AllocatorBench]
 sizes_length=10
