@@ -18,7 +18,7 @@ import java.io.IOException;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
-@Fork(1)
+@Fork(value = 1, jvmArgs = {"-Xmx2G", "-Xms2G"})
 public class AllocatorThreadBench {
 
     private List<Integer> allocationSizes;
