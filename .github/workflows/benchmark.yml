@@ -85,12 +85,6 @@ jobs:
           cd Java/app
           gradle build
           java -cp build/libs/app.jar org.example.BenchmarkRunner > benchmark_results_java.txt
-
-      - name: Run JavaJMH benchmarks
-        run: |
-          cd JavaJMH/app
-          gradle shadowJar
-          java -cp build/libs/app-all.jar org.example.BenchmarkRunner > benchmark_results_javajmh.txt
   
       - name: Update README with benchmark results
         run: |
