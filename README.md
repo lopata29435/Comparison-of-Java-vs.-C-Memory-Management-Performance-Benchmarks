@@ -202,3 +202,30 @@ Recursive allocation test with depth 1000 and allocation size 512 bytes: 0.22311
 -----------------------Memory Access Bench---------------------------------
 Memory access test for 1000 accesses in memory block of size 400000 bytes: 0.035817 milliseconds
 ```
+
+### JavaJMH Benchmark Results
+```
+-----------------------Byte Bench------------------------------------------
+Benchmark                      (allocationSize)  (iterations)  Mode  Cnt   Score    Error  Units
+ByteBench.measureAllocation                1000        100000  avgt    5  80.845 ± 31.761  ms/op
+ByteBench.measureDeallocation              1000        100000  avgt    5  ≈ 10⁻⁵           ms/op
+-----------------------Complex Object Bench--------------------------------
+Benchmark                                    (complexSize)  (iterations)  Mode  Cnt   Score    Error  Units
+ComplexObjectBench.measureAllocateComplex             1000          1000  avgt    5   1.209 ±  0.354  ms/op
+ComplexObjectBench.measureAllocatePrimitive           1000          1000  avgt    5  ≈ 10⁻⁶           ms/op
+-----------------------Allocator Bench-------------------------------------
+Benchmark                    Mode  Cnt   Score   Error  Units
+AllocatorBench.runBenchmark  avgt    5  15.563 ± 2.421  ms/op
+-----------------------Allocator Thread Bench------------------------------
+Benchmark                          Mode  Cnt   Score    Error  Units
+AllocatorThreadBench.runBenchmark  avgt    5  51.900 ± 11.618  ms/op
+-----------------------Memory Fragmentation Bench--------------------------
+Benchmark                                      Mode  Cnt   Score    Error  Units
+MemoryFragmentationBench.measureFragmentation  avgt    5  59.040 ± 11.054  ms/op
+-----------------------Recursive Allocation Bench--------------------------
+Benchmark                                            (allocationSize)  (depth)  Mode  Cnt  Score   Error  Units
+RecursiveAllocationBench.measureRecursiveAllocation               512     1000  avgt    5  0.011 ± 0.004  ms/op
+-----------------------Memory Access Bench---------------------------------
+Benchmark                              Mode  Cnt  Score   Error  Units
+MemoryAccessBench.measureMemoryAccess  avgt    5  0.088 ± 0.022  ms/op
+```
