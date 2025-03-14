@@ -228,17 +228,17 @@ MemoryAccessBench.measureMemoryAccess  avgt    5  24.793 ± 1.083  ms/op
 ```
 
 ### Results comparision
-| Benchmark | C++ | Java | JavaJMH |
-|-----------|------|------|--------|
-| Byte bench allocation | 4729.9 | 1961.0 | 2737.412 |
-| Byte bench deallocation | 5309.42 | 385.0 | N/A |
-| Primitive object bench allocation and deallocation | 0.0 | 2.0 | N/A |
-| Complex object bench allocation and deallocation | 5204.37 | 9798.0 | 8886.012 |
-| Allocator bench | 106.0 | 89.0 | 32.94 |
-| Allocator thread bench | 8256.0 | 1851.0 | 1891.43 |
-| Memory fragmentation bench | 2317.1 | 1654.7672 | 1309.771 |
-| Recursive allocation bench | 6353.12 | 929.6657 | 717.849 |
-| Memory access bench | 0.1461 | 1.2889 | 24.793 |
+| Benchmark | C++ | Java | JavaJMH | Units |
+|-----------|------|------|--------|-------|
+| Byte bench allocation | 4729.9 | 1961.0 | 2737.412 | ms |
+| Byte bench deallocation | 5309.42 | 385.0 | N/A | ms |
+| Primitive object bench allocation and deallocation | 0.0 | 2.0 | N/A | ms |
+| Complex object bench allocation and deallocation | 5204.37 | 9798.0 | 8886.012 | ms |
+| Allocator bench | 106.0 | 89.0 | 32.94 | ms |
+| Allocator thread bench | 8256.0 | 1851.0 | 1891.43 | ms |
+| Memory fragmentation bench | 2317.1 | 1654.7672 | 1309.771 | ms |
+| Recursive allocation bench | 6353.12 | 929.6657 | 717.849 | ms |
+| Memory access bench | 0.1461 | 1.2889 | 24.793 | ms |
 
 
 ![Benchmark runtime graph](benchmark_chart.png)
