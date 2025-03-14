@@ -73,7 +73,6 @@ jobs:
         run: |
           wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz
           tar -xf cmake-3.31.5-linux-x86_64.tar.gz
-          # Проверка на существование каталога
           if [ ! -d /opt/cmake-3.31.5 ]; then
             sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
           else
@@ -84,7 +83,7 @@ jobs:
 
       - name: Run Python script
         run: |
-          python3 dataGen.py --max-power 20
+          python3 dataGen.py
       
       - name: Build C++ project
         run: |
