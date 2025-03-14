@@ -46,7 +46,11 @@ jobs:
         run: |
           wget https://services.gradle.org/distributions/gradle-8.12.1-bin.zip
           unzip gradle-8.12.1-bin.zip
-          sudo mv gradle-8.12.1 /opt/gradle-8.12.1
+          if [ ! -d /opt/gradle-8.12.1 ]; then
+            sudo mv gradle-8.12.1 /opt/gradle-8.12.1
+          else
+            echo "Gradle 8.12.1 is already installed."
+          fi
           echo "export PATH=/opt/gradle-8.12.1/bin:$PATH" >> ~/.bashrc
           source ~/.bashrc
           
@@ -59,7 +63,7 @@ jobs:
             tar -xvf LLVM-20.1.0-rc2-Linux-X64.tar.xz
             sudo mv LLVM-20.1.0-rc2-Linux-X64 /opt/llvm-20.1.0
           else
-            echo "LLVM уже установлен"
+            echo "LLVM already installed"
           fi
           echo 'export PATH=/opt/llvm-20.1.0/bin:$PATH' >> ~/.bashrc
           echo 'export LD_LIBRARY_PATH=/opt/llvm-20.1.0/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
@@ -69,7 +73,12 @@ jobs:
         run: |
           wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz
           tar -xf cmake-3.31.5-linux-x86_64.tar.gz
-          sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
+          # Проверка на существование каталога
+          if [ ! -d /opt/cmake-3.31.5 ]; then
+            sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
+          else
+            echo "CMake 3.31.5 is already installed."
+          fi
           echo 'export PATH=/opt/cmake-3.31.5/bin:$PATH' >> ~/.bashrc
           source ~/.bashrc
 
