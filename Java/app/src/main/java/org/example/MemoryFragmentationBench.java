@@ -2,6 +2,9 @@ package org.example;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 public class MemoryFragmentationBench {
 
@@ -15,6 +18,15 @@ public class MemoryFragmentationBench {
         System.out.println("Fragmentation test for " + allocationSizes.size()
                 + " allocations with predefined sizes and free patterns: "
                 + fragmentationTime + " milliseconds");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Memory fragmentation bench\n");
+            fileWriter.write(String.valueOf(fragmentationTime));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     private double measureFragmentation(List<Integer> allocationSizes, List<Boolean> freePatterns) {

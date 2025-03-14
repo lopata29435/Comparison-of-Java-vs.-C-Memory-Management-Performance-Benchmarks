@@ -5,6 +5,7 @@
 #include <vector>
 #include <chrono>
 #include <cstdlib>
+#include <fstream>
 
 using Clock = std::chrono::high_resolution_clock;
 using TimePoint = std::chrono::time_point<Clock>;
@@ -19,6 +20,21 @@ public:
         std::cout << "Time for " << iterations << " allocations of size " << allocation_size
                   << " bytes: " << allocation_time << " milliseconds" << std::endl;
         std::cout << "Time for " << iterations << " deallocations: " << deallocation_time << " milliseconds" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Byte bench allocation" << std::endl;
+            file << allocation_time << std::endl;
+            file << std::endl << std::endl;
+            file << "Byte bench deallocation" << std::endl;
+            file << deallocation_time << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

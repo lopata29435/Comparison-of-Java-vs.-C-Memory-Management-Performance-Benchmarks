@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
+#include <fstream>
 
 // Structure to store benchmark results.
 struct BenchmarkResults {
@@ -23,6 +24,18 @@ public:
         std::cout << "Time for " << allocationSizes.size() << " allocations: " 
                   << results.duration << " milliseconds" << std::endl;
         std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Allocator bench" << std::endl;
+            file << results.duration << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.Arrays;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 public class RecursiveAllocationBench {
     public void run(long depth, long allocationSize) {
@@ -9,6 +12,15 @@ public class RecursiveAllocationBench {
         System.out.println("Recursive allocation test with depth " + depth
                 + " and allocation size " + allocationSize + " bytes: "
                 + recursiveTime + " milliseconds");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Recursive allocation bench\n");
+            fileWriter.write(String.valueOf(recursiveTime));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     private byte[] recursiveAllocation(long depth, long size) {

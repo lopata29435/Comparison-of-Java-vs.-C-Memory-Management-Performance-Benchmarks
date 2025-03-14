@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 
 class RecursiveAllocationBench {
 public:
@@ -14,6 +15,18 @@ public:
         std::cout << "Recursive allocation test with depth " << depth
                   << " and allocation size " << allocation_size << " bytes: "
                   << recursive_time << " milliseconds" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Recursive allocation bench" << std::endl;
+            file << recursive_time << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

@@ -3,6 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ByteBench {
 
@@ -14,6 +16,18 @@ public class ByteBench {
         System.out.println("Time for " + iterations + " allocations of size " + allocationSize
                 + " bytes: " + allocationTime + " milliseconds");
         System.out.println("Time for " + iterations + " deallocations: " + deallocationTime + " milliseconds");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Byte bench allocation\n");
+            fileWriter.write(String.valueOf(allocationTime));
+            fileWriter.write("\n\n");
+            fileWriter.write("Byte bench deallocation\n");
+            fileWriter.write(String.valueOf(deallocationTime));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     // Function to measure allocation time in milliseconds.

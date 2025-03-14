@@ -5,6 +5,7 @@
 #include <vector>
 #include <chrono>
 #include <cstdlib>
+#include <fstream>
 
 class MemoryFragmentationBench {
 public:
@@ -18,6 +19,18 @@ public:
         std::cout << "Fragmentation test for " << allocationSizes.size()
                   << " allocations with predefined sizes and free patterns: "
                   << fragmentation_time << " milliseconds" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Memory fragmentation bench" << std::endl;
+            file << fragmentation_time << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

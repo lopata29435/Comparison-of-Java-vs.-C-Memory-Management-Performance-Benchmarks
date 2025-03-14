@@ -3,7 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class AllocatorThreadBench {
 
@@ -17,10 +18,20 @@ public class AllocatorThreadBench {
         System.out.println("Time for " + allocationSizes.size() + " allocations: " 
                            + results.duration + " milliseconds");
         System.out.println("Max memory used: " + results.maxMemory + " bytes");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Allocator thread bench\n");
+            fileWriter.write(String.valueOf(results.duration));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     private void allocatorThreadBench(List<Integer> allocationSizes, int threadsNum, BenchmarkResults results) {
         List<Thread> threads = new ArrayList<>();
+        long startTime = System.nanoTime();  // Start time for the entire benchmark.
 
         for (int i = 0; i < threadsNum; ++i) {
             final int threadIndex = i;
@@ -29,7 +40,6 @@ public class AllocatorThreadBench {
                 allocations.ensureCapacity(allocationSizes.size());
 
                 long totalMemory = 0;
-                long start = System.nanoTime();
 
                 for (int allocSize : allocationSizes) {
                     // Allocate memory.
@@ -52,11 +62,8 @@ public class AllocatorThreadBench {
                 // Clean up remaining objects.
                 allocations.clear();
 
-                long end = System.nanoTime();
-
                 timeLock.lock();
                 try {
-                    results.duration += (end - start) / 1_000_000; // Convert to milliseconds
                     results.maxMemory = Math.max(results.maxMemory, totalMemory);
                 } finally {
                     timeLock.unlock();
@@ -74,6 +81,18 @@ public class AllocatorThreadBench {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+        }
+
+        // End time for the entire benchmark.
+        long endTime = System.nanoTime();
+        long durationNs = endTime - startTime;
+
+        // Convert to milliseconds and update results.
+        timeLock.lock();
+        try {
+            results.duration = durationNs / 1_000_000;  // Convert to milliseconds
+        } finally {
+            timeLock.unlock();
         }
     }
 }

@@ -8,6 +8,7 @@
 #include <vector>
 #include <chrono>
 #include <mutex>
+#include <fstream>
 
 using Clock = std::chrono::high_resolution_clock;
 using TimePoint = std::chrono::time_point<Clock>;
@@ -23,6 +24,18 @@ public:
         std::cout << "Time for " << allocationSizes.size() << " allocations: " 
                   << results.duration << " milliseconds" << std::endl;
         std::cout << "Max memory used: " << results.maxMemory << " bytes" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Allocator thread bench" << std::endl;
+            file << results.duration << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

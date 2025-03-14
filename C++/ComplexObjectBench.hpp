@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <memory>
+#include <fstream>
 
 using Clock = std::chrono::high_resolution_clock;
 using TimePoint = std::chrono::time_point<Clock>;
@@ -36,6 +37,21 @@ public:
         double complex_time = measure_allocate_complex(iterations, complex_size);
         std::cout << "Time to allocate and free " << iterations << " complex objects: "
                   << complex_time << " milliseconds" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Primitive object bench allocation and deallocation" << std::endl;
+            file << primitive_time << std::endl;
+            file << std::endl << std::endl;
+            file << "Complex object bench allocation and deallocation" << std::endl;
+            file << complex_time << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:

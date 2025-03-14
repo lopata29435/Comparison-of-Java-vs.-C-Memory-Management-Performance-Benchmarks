@@ -30,6 +30,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3.12
           sudo apt-get install -y python3-pip
+          python3 -m pip install --upgrade pip
+          pip install matplotlib numpy
           
       - name: Set up Java 21
         uses: actions/setup-java@v3
@@ -84,19 +86,35 @@ jobs:
         run: |
           cd Java/app
           gradle build
-          java -cp build/libs/app.jar org.example.BenchmarkRunner > benchmark_results_java.txt
+          java -Xmx16g -Xms4g -Xss8m -cp build/libs/app.jar org.example.BenchmarkRunner > benchmark_results_java.txt
   
+      - name: Run JavaJMH benchmarks
+        run: |
+          cd JavaJMH/app
+          gradle shadowJar
+          java -Xmx16g -Xms4g -Xss16m -cp build/libs/app-all.jar org.example.BenchmarkRunner > benchmark_results_javajmh.txt
+
       - name: Update README with benchmark results
         run: |
           RESULT_CPP=$(cat C++/build/benchmark_results_cpp.txt)
           RESULT_JAVA=$(cat Java/app/benchmark_results_java.txt)
+          RESULT_JAVAJMH=$(cat JavaJMH/app/benchmark_results_javajmh.txt)
           
-          NEW_RESULTS="## Latest Benchmarks results\n\n### C++ Benchmark Results\n\`\`\`\n$RESULT_CPP\n\`\`\`\n\n### Java Benchmark Results\n\`\`\`\n$RESULT_JAVA\n\`\`\`"
+          NEW_RESULTS="## Latest Benchmarks results\n\n### C++ Benchmark Results\n\`\`\`\n$RESULT_CPP\n\`\`\`\n\n### Java Benchmark Results\n\`\`\`\n$RESULT_JAVA\n\`\`\`\n\n### JavaJMH Benchmark Results\n\`\`\`\n$RESULT_JAVAJMH\n\`\`\`"
           
           sed -i '/## Latest Benchmarks results/,$d' README.md  
           
           echo -e "$NEW_RESULTS" >> README.md
           
+      - name: Result processing
+        run: |
+          python3 tableCreate.py
+          echo -e "\n## Benchmark Results Table" >> README.md
+          cat benchmark_results.md >> README.md
+          echo -e "\n## Benchmark Results Chart" >> README.md
+          echo '![Benchmark Chart](benchmark_chart.png)' >> README.md 
+          rm benchmark_results.md
+
       - name: Commit changes
         run: |
           git diff README.md

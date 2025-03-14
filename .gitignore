@@ -2,7 +2,7 @@
 build/
 
 .env
-
+.venv
 C++/build/
 C++/.vscode/
 data/

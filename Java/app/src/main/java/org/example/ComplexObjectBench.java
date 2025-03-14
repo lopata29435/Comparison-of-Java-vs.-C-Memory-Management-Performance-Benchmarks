@@ -1,6 +1,9 @@
 package org.example;
 
 import java.util.concurrent.TimeUnit;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 // Some complex object.
 class ComplexObject {
@@ -26,6 +29,18 @@ class ComplexObjectBench {
         double complexTime = measureAllocateComplex(iterations, complexSize);
         System.out.println("Time to allocate and free " + iterations + " complex objects: "
                 + complexTime + " milliseconds");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Primitive object bench allocation and deallocation\n");
+            fileWriter.write(String.valueOf(primitiveTime));
+            fileWriter.write("\n\n");
+            fileWriter.write("Complex object bench allocation and deallocation\n");
+            fileWriter.write(String.valueOf(complexTime));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     // Measure primitive allocation time in milliseconds.

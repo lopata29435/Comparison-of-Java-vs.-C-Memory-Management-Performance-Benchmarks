@@ -2,6 +2,8 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
 
 // Structure to store benchmark results.
 class BenchmarkResults {
@@ -23,6 +25,15 @@ public class AllocatorBench {
         System.out.println("Time for " + allocationSizes.size() + " allocations: " 
                 + results.duration + " milliseconds");
         System.out.println("Max memory used: " + results.maxMemory + " bytes");
+
+        try (FileWriter fileWriter = new FileWriter("Java_Benchmark_results.txt", true)) {
+            fileWriter.write("Allocator bench\n");
+            fileWriter.write(String.valueOf(results.duration));
+            fileWriter.write("\n\n");
+        } catch (IOException e) {
+            System.err.println("Failed to open the file for writing.");
+            e.printStackTrace();
+        }
     }
 
     private void allocatorBench(List<Integer> allocationSizes, BenchmarkResults results) {

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <fstream>
 
 class MemoryAccessBench {
 public:
@@ -13,6 +14,18 @@ public:
         std::cout << "Memory access test for " << accessIndices.size()
                   << " accesses in memory block of size " << element_count * sizeof(int)
                   << " bytes: " << access_time << " milliseconds" << std::endl;
+
+        std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Memory access bench" << std::endl;
+            file << access_time << std::endl;
+            file << std::endl << std::endl;
+        } else {
+            std::cerr << "Failed to open the file for writing." << std::endl;
+        }
+
+        file.close();
     }
 
 private:
