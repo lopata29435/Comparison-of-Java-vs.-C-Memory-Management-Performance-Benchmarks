@@ -95,20 +95,28 @@ jobs:
 
       - name: Run C++ benchmarks and capture output
         run: |
+          ulimit -m unlimited
+          ulimit -v unlimited
           cd C++/build
           ./P1 > benchmark_results_cpp.txt
+        env:
+          MEMORY_LIMIT: 32G
         
       - name: Run Java benchmarks
         run: |
           cd Java/app
           gradle build
           java -Xmx16g -Xms4g -Xss8m -cp build/libs/app.jar org.example.BenchmarkRunner > benchmark_results_java.txt
+        env:
+          MEMORY_LIMIT: 32G
   
       - name: Run JavaJMH benchmarks
         run: |
           cd JavaJMH/app
           gradle shadowJar
           java -Xmx16g -Xms4g -Xss16m -cp build/libs/app-all.jar org.example.BenchmarkRunner > benchmark_results_javajmh.txt
+        env:
+          MEMORY_LIMIT: 32G
 
       - name: Update README with benchmark results
         run: |
