@@ -54,9 +54,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
-          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0-rc2/LLVM-20.1.0-rc2-Linux-X64.tar.xz
-          tar -xvf LLVM-20.1.0-rc2-Linux-X64.tar.xz
-          sudo mv LLVM-20.1.0-rc2-Linux-X64 /opt/llvm-20.1.0
+          if [ ! -d "/opt/llvm-20.1.0" ]; then
+            wget https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.0-rc2/LLVM-20.1.0-rc2-Linux-X64.tar.xz
+            tar -xvf LLVM-20.1.0-rc2-Linux-X64.tar.xz
+            sudo mv LLVM-20.1.0-rc2-Linux-X64 /opt/llvm-20.1.0
+          else
+            echo "LLVM уже установлен"
+          fi
           echo 'export PATH=/opt/llvm-20.1.0/bin:$PATH' >> ~/.bashrc
           echo 'export LD_LIBRARY_PATH=/opt/llvm-20.1.0/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
           source ~/.bashrc || true
@@ -66,7 +70,7 @@ jobs:
           wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz
           tar -xf cmake-3.31.5-linux-x86_64.tar.gz
           sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
-          echo "export PATH=/opt/cmake-3.31.5/bin:$PATH" >> ~/.bashrc
+          export PATH=/opt/cmake-3.31.5/bin:$PATH
           source ~/.bashrc
 
       - name: Run Python script
