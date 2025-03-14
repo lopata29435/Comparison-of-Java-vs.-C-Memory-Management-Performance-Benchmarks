@@ -29,15 +29,24 @@ public class RecursiveAllocationBench {
         }
 
         byte[] last = recursiveAllocation(depth, allocationSize);
+        last = null;
     }
 
     private byte[] recursiveAllocation(long depth, long size) {
         if (depth == 0) {
-            return new byte[(int) size];
+            byte[] ptr = new byte[(int) size];
+            Arrays.fill(ptr, (byte) 0);
+            return ptr;
         }
 
         byte[] ptr = new byte[(int) size];
+        Arrays.fill(ptr, (byte) 0);
         byte[] child = recursiveAllocation(depth - 1, size);
+
+        Arrays.fill(ptr, (byte) 1);
+        System.arraycopy(ptr, 0, child, 0, (int) size);
+
+        ptr = null;
         return child;
     }
 

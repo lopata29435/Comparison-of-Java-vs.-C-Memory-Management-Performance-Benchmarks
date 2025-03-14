@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <cstdlib>
+#include <cstring>
 
 class RecursiveAllocationBench {
 public:
@@ -18,21 +19,29 @@ public:
 private:
     char* recursive_allocation(size_t depth, size_t size) {
         if (depth == 0) {
-            return new char[size];
+            char* ptr = new char[size];
+            std::memset(ptr, 0, size); // Fill the memory with zeros
+            return ptr;
         }
 
         char* ptr = new char[size];
+        std::memset(ptr, 0, size); // Fill the memory with zeros
         char* child = recursive_allocation(depth - 1, size);
-        delete[] ptr;
+
+        // Add some "useful" work with memory to prevent the compiler from optimizing it
+        std::memset(ptr, 1, size); // Modify the memory content
+        std::memcpy(child, ptr, size); // Copy data from ptr to child
+
+        delete[] ptr; // Free the intermediate memory
         return child;
     }
 
     double measure_recursive_allocation(size_t depth, size_t size) {
-        auto start = std::chrono::high_resolution_clock::now();
+        auto start = std::chrono::steady_clock::now();
         char* last = recursive_allocation(depth, size);
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::steady_clock::now();
 
-        delete[] last;
+        delete[] last; // Free the last block of memory
 
         return std::chrono::duration<double, std::milli>(end - start).count();
     }

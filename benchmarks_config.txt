@@ -1,34 +1,30 @@
 [ByteBench]
-iterations=100000
-allocation_size=1000
-
-[ByteNewBench]
-iterations=100000
-allocation_size=100000
+iterations=100000000
+allocation_size=100
 
 [ComplexObjectBench]
-iterations=100000
-element_count=100000
+iterations=50000000
+element_count=1000
 
 [AllocatorBench]
-sizes_length=10
+sizes_length=1000000
 allocation_sizes_file=../../data/AllocatorBench/allocation_sizes.txt
 
 [AllocatorThreadBench]
-sizes_length=10
+sizes_length=1000000
 allocation_sizes_file=../../data/AllocatorThreadBench/allocation_sizes.txt
-threads_num=20
+threads_num=40
 
 [MemoryFragmentationBench]
-sizes_length=10
+sizes_length=10000000
 allocation_sizes_file=../../data/MemoryFragmentationBench/allocation_sizes.txt
 free_patterns_file=../../data/MemoryFragmentationBench/free_patterns.txt
 
 [RecursiveAllocationBench]
-depth=1000
-allocation_size=128
+depth=100000
+allocation_size=32768
 
 [MemoryAccessBench]
-element_count=1000
-indices_length=10
+element_count=100000000
+indices_length=100000
 access_indices_file=../../data/MemoryAccessBench/access_indices.txt

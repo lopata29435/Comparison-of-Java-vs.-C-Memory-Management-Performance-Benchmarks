@@ -33,6 +33,7 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "org.example.BenchmarkRunner"
+    applicationDefaultJvmArgs = listOf("-Xmx16g", "-Xms4g", "-Xss8m")
     //applicationDefaultJvmArgs = listOf(
       //  "-Xint", // Отключает JIT-компиляцию
         //"-XX:+UnlockDiagnosticVMOptions", 

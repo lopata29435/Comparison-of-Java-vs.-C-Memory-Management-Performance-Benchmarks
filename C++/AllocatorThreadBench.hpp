@@ -27,7 +27,10 @@ public:
 
 private:
     void allocatorThreadBench(const std::vector<size_t>& allocationSizes, size_t threadsNum, BenchmarkResults& results) {
-        // Create threads and start them.
+        // Record the start time for the execution of all threads.
+        TimePoint start = Clock::now();
+
+        // Create and launch threads.
         std::vector<std::thread> threads;
         for (size_t i = 0; i < threadsNum; ++i) {
             threads.emplace_back([this, i, &results, &allocationSizes]() {
@@ -35,7 +38,6 @@ private:
                 allocations.reserve(allocationSizes.size());
 
                 size_t totalMemory = 0;
-                TimePoint start = Clock::now();
 
                 for (size_t allocSize : allocationSizes) {
                     // Allocate memory.
@@ -43,12 +45,12 @@ private:
                     allocations.push_back(ptr);
                     totalMemory += allocSize * sizeof(int);
 
-                    // Fill the memory.
+                    // Fill the allocated memory.
                     for (size_t j = 0; j < allocSize; ++j) {
                         ptr[j] = static_cast<int>(i + j);
                     }
 
-                    // Free memory conditionally to simulate partial deallocation.
+                    // Partially deallocate memory.
                     if (allocations.size() > allocationSizes.size() / 2) {
                         delete[] allocations.back();
                         allocations.pop_back();
@@ -56,15 +58,13 @@ private:
                     }
                 }
 
-                // Clean up remaining objects.
+                // Deallocate the remaining memory.
                 for (int* ptr : allocations) {
                     delete[] ptr;
                 }
 
-                TimePoint end = Clock::now();
-
+                // Update the maximum memory usage.
                 std::lock_guard<std::mutex> lock(timeMutex);
-                results.duration += std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
                 results.maxMemory = std::max(results.maxMemory, totalMemory);
             });
         }
@@ -73,6 +73,12 @@ private:
         for (auto& t : threads) {
             t.join();
         }
+
+        // Record the end time for the execution of all threads.
+        TimePoint end = Clock::now();
+
+        // Calculate the total execution time.
+        results.duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     }
 
 private:

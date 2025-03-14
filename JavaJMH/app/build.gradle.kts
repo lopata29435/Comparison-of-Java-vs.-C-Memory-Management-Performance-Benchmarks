@@ -31,6 +31,7 @@ java {
 
 application {
     mainClass = "org.example.BenchmarkRunner"
+    applicationDefaultJvmArgs = listOf("-Xmx16g", "-Xms4g", "-Xss8m")
 }
 
 tasks.jar {

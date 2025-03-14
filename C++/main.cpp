@@ -7,7 +7,6 @@
 #include "ByteBench.hpp"
 #include "AllocatorBench.hpp"
 #include "AllocatorThreadBench.hpp"
-#include "ByteNewBench.hpp"
 #include "ComplexObjectBench.hpp"
 #include "MemoryAccessBench.hpp"
 #include "MemoryFragmentationBench.hpp"
@@ -141,9 +140,6 @@ int main() {
     ByteBench byteBench;
     auto& byteBenchConfig = configs["ByteBench"];
     
-    ByteNewBench byteNewBench;
-    auto& byteNewBenchConfig = configs["ByteNewBench"];
-    
     ComplexObjectBench complexObjectBench;
     auto& complexObjectBenchConfig = configs["ComplexObjectBench"];
     
@@ -168,10 +164,8 @@ int main() {
 
     //Template for all run function arguments (in brackets special cases, depends on realization):
     // Iterations(num of elements), Size of element(max size of elemnt), additional args(threads, e.t.c)
-    std::cout << "-----------------------Byte Bench------------------------------------------\n";
-    byteBench.run(byteBenchConfig.iterations, byteBenchConfig.allocation_size);
-    std::cout << "-----------------------Byte New Bench--------------------------------------\n";
-    byteNewBench.run(byteNewBenchConfig.iterations, byteNewBenchConfig.allocation_size);
+    std::cout << "-----------------------Byte Bench--------------------------------------\n";
+    byteBench.run(byteBenchConfig.allocation_size, byteBenchConfig.iterations);
     std::cout << "-----------------------Complex Object Bench--------------------------------\n";
     complexObjectBench.run(complexObjectBenchConfig.iterations, complexObjectBenchConfig.element_count);
     std::cout << "-----------------------Allocator bench-------------------------------------\n";
