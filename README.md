@@ -157,48 +157,75 @@ Benchmark for measuring memory access performance. Each access is performed on r
 ### C++ Benchmark Results
 ```
 -----------------------Byte Bench------------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.38606 milliseconds
-Time for 1000 deallocations: 0.069239 milliseconds
+Time for 100000 allocations of size 1000 bytes: 39.5319 milliseconds
+Time for 100000 deallocations: 7.46498 milliseconds
 -----------------------Byte New Bench--------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.317091 milliseconds
-Time for 1000 deallocations: 0.070021 milliseconds
+Time for 1000 allocations of size 100000 bytes: 2.2006 milliseconds
+Time for 1000 deallocations: 0.300295 milliseconds
 -----------------------Complex Object Bench--------------------------------
-Time to allocate and free 1000 primitive integers: 3e-05 milliseconds
-Time to allocate and free 1000 complex objects: 0.217967 milliseconds
+Time to allocate and free 1000 primitive integers: 2.9e-05 milliseconds
+Time to allocate and free 1000 complex objects: 0.187321 milliseconds
 -----------------------Allocator bench-------------------------------------
-Time for 10 allocations: 0 milliseconds
-Max memory used: 2424832 bytes
+Time for 100 allocations: 9 milliseconds
+Max memory used: 39282176 bytes
 -----------------------Allocator Thread Bench------------------------------
 Threads Num is: 20
-Time for 10 allocations: 22 milliseconds
-Max memory used: 398336 bytes
+Time for 10 allocations: 182 milliseconds
+Max memory used: 4983296 bytes
 -----------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 0.018795 milliseconds
+Fragmentation test for 1000 allocations with predefined sizes and free patterns: 1.05493 milliseconds
 -----------------------Recursive Allocation Bench--------------------------
-Recursive allocation test with depth 1000 and allocation size 128 bytes: 3e-05 milliseconds
+Recursive allocation test with depth 1000 and allocation size 512 bytes: 4e-05 milliseconds
 -----------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 5e-05 milliseconds
+Memory access test for 1000 accesses in memory block of size 400000 bytes: 0.002224 milliseconds
 ```
 
 ### Java Benchmark Results
 ```
 -----------------------Byte Bench------------------------------------------
-Time for 1000 allocations of size 1000 bytes: 0.0 milliseconds
-Time for 1000 deallocations: 0.0 milliseconds
+Time for 100000 allocations of size 1000 bytes: 38.0 milliseconds
+Time for 100000 deallocations: 0.0 milliseconds
 -----------------------Complex Object Bench--------------------------------
 Time to allocate and free 1000 primitive integers: 0.0 milliseconds
-Time to allocate and free 1000 complex objects: 5.0 milliseconds
+Time to allocate and free 1000 complex objects: 3.0 milliseconds
 -----------------------Allocator Bench-------------------------------------
-Time for 10 allocations: 3 milliseconds
-Max memory used: 2424832 bytes
+Time for 100 allocations: 36 milliseconds
+Max memory used: 39282176 bytes
 -----------------------Allocator Thread Bench------------------------------
 Threads Num is: 20
-Time for 10 allocations: 1955 milliseconds
-Max memory used: 398336 bytes
+Time for 10 allocations: 3008 milliseconds
+Max memory used: 4983296 bytes
 -----------------------Memory Fragmentation Bench--------------------------
-Fragmentation test for 10 allocations with predefined sizes and free patterns: 1.037673 milliseconds
+Fragmentation test for 1000 allocations with predefined sizes and free patterns: 14.669135 milliseconds
 -----------------------Recursive Allocation Bench--------------------------
-Recursive allocation test with depth 1000 and allocation size 128 bytes: 0.298116 milliseconds
+Recursive allocation test with depth 1000 and allocation size 512 bytes: 0.22311 milliseconds
 -----------------------Memory Access Bench---------------------------------
-Memory access test for 10 accesses in memory block of size 4000 bytes: 0.012333 milliseconds
+Memory access test for 1000 accesses in memory block of size 400000 bytes: 0.035817 milliseconds
+```
+
+### JavaJMH Benchmark Results
+```
+-----------------------Byte Bench------------------------------------------
+Benchmark                      (allocationSize)  (iterations)  Mode  Cnt   Score    Error  Units
+ByteBench.measureAllocation                1000        100000  avgt    5  80.845 ± 31.761  ms/op
+ByteBench.measureDeallocation              1000        100000  avgt    5  ≈ 10⁻⁵           ms/op
+-----------------------Complex Object Bench--------------------------------
+Benchmark                                    (complexSize)  (iterations)  Mode  Cnt   Score    Error  Units
+ComplexObjectBench.measureAllocateComplex             1000          1000  avgt    5   1.209 ±  0.354  ms/op
+ComplexObjectBench.measureAllocatePrimitive           1000          1000  avgt    5  ≈ 10⁻⁶           ms/op
+-----------------------Allocator Bench-------------------------------------
+Benchmark                    Mode  Cnt   Score   Error  Units
+AllocatorBench.runBenchmark  avgt    5  15.563 ± 2.421  ms/op
+-----------------------Allocator Thread Bench------------------------------
+Benchmark                          Mode  Cnt   Score    Error  Units
+AllocatorThreadBench.runBenchmark  avgt    5  51.900 ± 11.618  ms/op
+-----------------------Memory Fragmentation Bench--------------------------
+Benchmark                                      Mode  Cnt   Score    Error  Units
+MemoryFragmentationBench.measureFragmentation  avgt    5  59.040 ± 11.054  ms/op
+-----------------------Recursive Allocation Bench--------------------------
+Benchmark                                            (allocationSize)  (depth)  Mode  Cnt  Score   Error  Units
+RecursiveAllocationBench.measureRecursiveAllocation               512     1000  avgt    5  0.011 ± 0.004  ms/op
+-----------------------Memory Access Bench---------------------------------
+Benchmark                              Mode  Cnt  Score   Error  Units
+MemoryAccessBench.measureMemoryAccess  avgt    5  0.088 ± 0.022  ms/op
 ```
