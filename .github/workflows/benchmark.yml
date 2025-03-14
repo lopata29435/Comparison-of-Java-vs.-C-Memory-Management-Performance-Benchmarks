@@ -70,7 +70,7 @@ jobs:
           wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz
           tar -xf cmake-3.31.5-linux-x86_64.tar.gz
           sudo mv cmake-3.31.5-linux-x86_64 /opt/cmake-3.31.5
-          export PATH=/opt/cmake-3.31.5/bin:$PATH
+          echo 'export PATH=/opt/cmake-3.31.5/bin:$PATH' >> ~/.bashrc
           source ~/.bashrc
 
       - name: Run Python script
