@@ -11,7 +11,7 @@ sizes_length=1000000
 allocation_sizes_file=../../data/AllocatorBench/allocation_sizes.txt
 
 [AllocatorThreadBench]
-sizes_length=1000000
+sizes_length=200000
 allocation_sizes_file=../../data/AllocatorThreadBench/allocation_sizes.txt
 threads_num=40
 
