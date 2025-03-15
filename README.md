@@ -227,7 +227,7 @@ Benchmark                              Mode  Cnt   Score   Error  Units
 MemoryAccessBench.measureMemoryAccess  avgt    5  24.793 ± 1.083  ms/op
 ```
 
-### Results comparision
+### Results comparison
 | Benchmark | C++ | Java | JavaJMH | Units |
 |-----------|------|------|--------|-------|
 | Byte bench allocation | 4729.9 | 1961.0 | 2737.412 | ms |
