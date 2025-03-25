@@ -128,10 +128,7 @@ The configuration file (benchmark_config.txt) defines the parameters for each be
 ## Description of benchmark scenarios
 
 ### ByteBench
-Benchmark to measure the performance of fixed-size memory allocation. Each iteration performs memory allocation of the specified size. Malloc is used for allocation.
-
-### ByteNewBench
-Benchmark to measure memory allocation performance using `new` operator. Each iteration performs a memory allocation of the specified size using the `new` operator.
+Benchmark to measure the performance of fixed-size memory allocation. Each iteration performs memory allocation of the specified size.
 
 ### ComplexObjectBench
 Benchmark for allocating memory for complex objects with a specified number of elements. Each iteration allocates memory for a complex object the specified number of iterations. A complex object is a class with a field containing a vector of the specified size.
