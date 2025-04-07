@@ -43,14 +43,11 @@ public class MemoryAccessBench {
             data[i] = i;
         }
 
-        long start = System.nanoTime();
         int sum = 0;
 
         for (int index : accessIndices) {
             sum += data[index % elementCount];
         }
-
-        long end = System.nanoTime();
 
         return TimeUnit.NANOSECONDS.toMillis(end - start);
     }
