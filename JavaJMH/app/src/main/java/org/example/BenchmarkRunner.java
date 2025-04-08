@@ -22,7 +22,7 @@ public class BenchmarkRunner {
         try {
             System.out.println(System.getProperty("user.dir"));
             Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.ini");
- 
+  
             Fixed_Size_Allocation fixed_Size_Allocation = new Fixed_Size_Allocation();
             BenchmarkConfig fixed_Size_Allocation_Config = configs.get("Fixed_Size_Allocation");
             System.out.println("-----------------------Fixed_Size_Allocation--------------------------------------");

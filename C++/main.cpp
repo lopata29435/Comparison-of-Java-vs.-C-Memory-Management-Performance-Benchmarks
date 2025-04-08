@@ -159,8 +159,6 @@ int main() {
     std::ofstream clearFile("CXX_Benchmark_results.txt", std::ios::trunc);
     clearFile.close();
 
-    //Template for all run function arguments (in brackets special cases, depends on realization):
-    // Iterations(num of elements), Size of element(max size of elemnt), additional args(threads, e.t.c)
     std::cout << "-----------------------Fixed_Size_Allocation--------------------------------------\n";
     fixed_Size_Allocation.run(fixed_Size_Allocation_Config.allocation_size, fixed_Size_Allocation_Config.iterations);
     std::cout << "-----------------------Complex_Object_Allocation----------------------------------\n";

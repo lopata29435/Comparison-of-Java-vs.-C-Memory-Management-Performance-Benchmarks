@@ -30,30 +30,30 @@ public:
     }
 
 private:
-    int8_t* recursive_allocation(size_t depth, size_t size) {
-        if (depth == 0) {
-            int8_t* ptr = new int8_t[size];
-            std::memset(ptr, 0, size); // Fill the memory with zeros
-            return ptr;
-        }
+    void recursive_allocation(size_t depth, size_t size, std::vector<int8_t*>& blocks, size_t index = 0) {
+        if (index >= depth) return;
 
         int8_t* ptr = new int8_t[size];
-        std::memset(ptr, 0, size); // Fill the memory with zeros
-        int8_t* child = recursive_allocation(depth - 1, size);
+        std::memset(ptr, 0, size);
 
-        // Add some "useful" work with memory to prevent the compiler from optimizing it
-        std::memset(ptr, 1, size); // Modify the memory content
-        std::memcpy(child, ptr, size); // Copy data from ptr to child
+        blocks[index] = ptr;
 
-        delete[] ptr; // Free the intermediate memory
-        return child;
+        recursive_allocation(depth, size, blocks, index + 1);
+
+        std::memset(ptr, 1, size);
+        std::memcpy(blocks[depth - 1], ptr, size);
     }
 
     double measure_recursive_allocation(size_t depth, size_t size) {
+        std::vector<int8_t*> blocks(depth);
+
         auto start = std::chrono::steady_clock::now();
-        int8_t* last = recursive_allocation(depth, size);
-        delete[] last; // Free the last block of memory
+        recursive_allocation(depth, size, blocks);
+        for (int8_t* ptr : blocks) {
+            delete[] ptr;
+        }
         auto end = std::chrono::steady_clock::now();
+        
         return std::chrono::duration<double, std::milli>(end - start).count();
     }
 };

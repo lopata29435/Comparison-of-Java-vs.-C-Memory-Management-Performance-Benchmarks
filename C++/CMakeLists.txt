@@ -19,7 +19,6 @@ add_executable(P1   main.cpp
                     Variable_Size_Allocation.hpp
                     Fragmentation_Test_Random_Allocation_Release.hpp
                     Recursive_Memory_Allocation.hpp
-                    asd.h
                     )
                     
 target_link_libraries(P1 PRIVATE Threads::Threads)

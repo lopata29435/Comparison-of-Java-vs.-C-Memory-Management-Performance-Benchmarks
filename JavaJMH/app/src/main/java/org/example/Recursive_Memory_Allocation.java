@@ -19,35 +19,34 @@ import java.util.Arrays;
 public class Recursive_Memory_Allocation {
 
     @Param({"1000"}) 
-    private long depth;
+    private int depth;
     @Param({"128"}) 
-    private long allocationSize;
+    private int allocationSize;
 
+    private byte[][] blocks;
+
+    @Setup(Level.Iteration)
+    public void setup() {
+        blocks = new byte[depth][];
+    }
 
     @Benchmark
     public void measureRecursiveAllocation() {
-        byte[] last = recursiveAllocation(depth, allocationSize);
-        last = null;
+        recursiveAllocation(blocks, allocationSize, 0);
+        for (int i = 0; i < depth; i++) {
+            blocks[i] = null;
+        }
         System.gc();
     }
-
-    private byte[] recursiveAllocation(long depth, long size) {
-        if (depth == 0) {
-            byte[] ptr = new byte[(int) size];
-            Arrays.fill(ptr, (byte) 0);
-            return ptr;
-        }
-
-        byte[] ptr = new byte[(int) size];
+    
+    private void recursiveAllocation(byte[][] blocks, int size, int index) {
+        if (index >= blocks.length) return;
+        byte[] ptr = new byte[size];
         Arrays.fill(ptr, (byte) 0);
-        byte[] child = recursiveAllocation(depth - 1, size);
-
+        blocks[index] = ptr;
+        recursiveAllocation(blocks, size, index + 1);
         Arrays.fill(ptr, (byte) 1);
-        System.arraycopy(ptr, 0, child, 0, (int) size);
-
-        ptr = null;
-        //System.gc();
-        return child;
+        System.arraycopy(ptr, 0, blocks[blocks.length - 1], 0, size);
     }
 
     public void run(long depth, long allocationSize) throws RunnerException {
