@@ -5,6 +5,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.results.format.ResultFormatType;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,47 +19,41 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-Xmx16g", "-Xms4g", "-Xss8m"})
-public class AllocatorBench {
+public class Variable_Size_Allocation {
 
     private List<Integer> allocationSizes;
-
+    private List<byte[]> allocations;
     @Setup(Level.Trial)
     public void setup() throws IOException {
-        Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.txt");
-        BenchmarkConfig config = configs.get("AllocatorBench");
+        Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.ini");
+        BenchmarkConfig config = configs.get("Variable_Size_Allocation");
 
         allocationSizes = DataLoader.loadIntegerListFromFile(config.allocationSizesFile);
+        allocations = new ArrayList<>(allocationSizes.size());
     }
 
     @Benchmark
     public void runBenchmark() {
-        if (allocationSizes == null) {
-            throw new IllegalStateException("Allocation sizes must be set before running the benchmark.");
-        }
-
-        List<int[]> allocations = new ArrayList<>(allocationSizes.size());
-
         for (int allocSize : allocationSizes) {
-            int[] arr = new int[allocSize];
+            byte[] arr = new byte[allocSize];
             allocations.add(arr);
 
             for (int j = 0; j < allocSize; j++) {
-                arr[j] = j;
-            }
-
-            if (allocations.size() > allocationSizes.size() / 2) {
-                allocations.remove(allocations.size() - 1);
+                arr[j] = (byte) j;
             }
         }
 
         allocations.clear();
+        System.gc();
     }
 
     public void run() throws RunnerException, IOException {
         Options opt = new OptionsBuilder()
                 .include(this.getClass().getSimpleName())
                 .forks(1)
-                .output("AllocatorBench_results.txt")
+                .output("Buf.txt")
+                .result("Variable_Size_Allocation.json")
+                .resultFormat(ResultFormatType.JSON) 
                 .build();
 
         new Runner(opt).run();

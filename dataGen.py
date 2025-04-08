@@ -17,9 +17,12 @@ def generate_access_indices(filename, indices_length, max_index):
 
 
 def generate_free_patterns(filename, length):
-    patterns = [random.choice([0, 1]) for _ in range(length)]
+    patterns = [1 if random.random() < 0.000005 else 0 for _ in range(length)]
+    # cnt = patterns.count(1)
+    # print(cnt)
     with open(filename, "w") as f:
         f.write("\n".join(map(str, patterns)))
+
 
 
 def process_config(config_path, data_dir, max_power_of_two):
@@ -58,7 +61,7 @@ def main():
 
     args = parser.parse_args()
 
-    config_path = "benchmarks_config.txt"
+    config_path = "benchmarks_config.ini"
     data_dir = "data"
 
     if not os.path.exists(config_path):

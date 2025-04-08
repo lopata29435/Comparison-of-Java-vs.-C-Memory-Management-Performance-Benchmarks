@@ -4,13 +4,12 @@
 #include <string>
 #include <sstream>
 
-#include "ByteBench.hpp"
-#include "AllocatorBench.hpp"
-#include "AllocatorThreadBench.hpp"
-#include "ComplexObjectBench.hpp"
-#include "MemoryAccessBench.hpp"
-#include "MemoryFragmentationBench.hpp"
-#include "RecursiveAllocationBench.hpp"
+#include "Fixed_Size_Allocation.hpp"
+#include "Variable_Size_Allocation.hpp"
+#include "Concurrent_Multithreaded_Allocation_Performance.hpp"
+#include "Complex_Object_Allocation.hpp"
+#include "Fragmentation_Test_Random_Allocation_Release.hpp"
+#include "Recursive_Memory_Allocation.hpp"
 
 struct BenchmarkConfig {
     size_t iterations = 0;
@@ -133,58 +132,51 @@ std::vector<bool> loadFreePatternsFromFile(const std::string& filename) {
 }
 
 int main() {
-    auto configs = loadConfig("../../benchmarks_config.txt");
+    auto configs = loadConfig("../../benchmarks_config.ini");
 
-    BenchmarkResults results = {0, 0};
-
-    ByteBench byteBench;
-    auto& byteBenchConfig = configs["ByteBench"];
+    Fixed_Size_Allocation fixed_Size_Allocation;
+    auto& fixed_Size_Allocation_Config = configs["Fixed_Size_Allocation"];
     
-    ComplexObjectBench complexObjectBench;
-    auto& complexObjectBenchConfig = configs["ComplexObjectBench"];
+    Complex_Object_Allocation complex_Object_Allocation;
+    auto& complex_Object_Allocation_Config = configs["Complex_Object_Allocation"];
     
-    AllocatorBench allocatorBench;
-    auto& allocatorBenchConfig = configs["AllocatorBench"];
+    Variable_Size_Allocation variable_Size_Allocation;
+    auto& variable_Size_Allocation_Config = configs["Variable_Size_Allocation"];
     
-    AllocatorThreadBench allocatorThreadBench;
-    auto& allocatorThreadBenchConfig = configs["AllocatorThreadBench"];
+    Concurrent_Multithreaded_Allocation_Performance concurrent_Multithreaded_Allocation_Performance;
+    auto& concurrent_Multithreaded_Allocation_Performance_Config = configs["Concurrent_Multithreaded_Allocation_Performance"];
     
-    MemoryAccessBench memoryAccessBench;
-    auto& memoryAccessBenchConfig = configs["MemoryAccessBench"];
-
-    MemoryFragmentationBench memoryFragmentationBench;
-    auto& memoryFragmentationBenchConfig = configs["MemoryFragmentationBench"];
+    Fragmentation_Test_Random_Allocation_Release fragmentation_Test_Random_Allocation_Release;
+    auto& fragmentation_Test_Random_Allocation_Release_Config = configs["Fragmentation_Test_Random_Allocation_Release"];
     
-    RecursiveAllocationBench recursiveAllocationBench;
-    auto& recursiveAllocationBenchConfig = configs["RecursiveAllocationBench"];
+    Recursive_Memory_Allocation recursive_Memory_Allocation;
+    auto& recursive_Memory_Allocation_Config = configs["Recursive_Memory_Allocation"];
 
     std::vector<size_t> allocationSizes;
     std::vector<size_t> accessIndices;
     std::vector<bool> freePatterns;
 
+    std::ofstream clearFile("CXX_Benchmark_results.txt", std::ios::trunc);
+    clearFile.close();
+
     //Template for all run function arguments (in brackets special cases, depends on realization):
     // Iterations(num of elements), Size of element(max size of elemnt), additional args(threads, e.t.c)
-    std::cout << "-----------------------Byte Bench--------------------------------------\n";
-    byteBench.run(byteBenchConfig.allocation_size, byteBenchConfig.iterations);
-    std::cout << "-----------------------Complex Object Bench--------------------------------\n";
-    complexObjectBench.run(complexObjectBenchConfig.iterations, complexObjectBenchConfig.element_count);
-    std::cout << "-----------------------Allocator bench-------------------------------------\n";
-    allocationSizes = loadAllocationSizesFromFile(allocatorBenchConfig.allocation_sizes_file);
-    allocatorBench.run(allocationSizes, results);
-    results = {0, 0};
-    std::cout << "-----------------------Allocator Thread Bench------------------------------\n";
-    allocationSizes = loadAllocationSizesFromFile(allocatorThreadBenchConfig.allocation_sizes_file);
-    allocatorThreadBench.run(allocationSizes, allocatorThreadBenchConfig.threads_num, results);
-    std::cout << "-----------------------Memory Fragmentation Bench--------------------------\n";
-    allocationSizes = loadAllocationSizesFromFile(memoryFragmentationBenchConfig.allocation_sizes_file);
-    freePatterns = loadFreePatternsFromFile(memoryFragmentationBenchConfig.free_patterns_file);
-    memoryFragmentationBench.run(allocationSizes, freePatterns);
-    std::cout << "-----------------------Recursive Allocation Bench--------------------------\n";
-    recursiveAllocationBench.run(recursiveAllocationBenchConfig.depth, recursiveAllocationBenchConfig.allocation_size);
-    std::cout << "-----------------------Memory Access Bench---------------------------------\n";
-    accessIndices = loadAccessIndicesFromFile(memoryAccessBenchConfig.access_indices_file);
-    memoryAccessBench.run(memoryAccessBenchConfig.element_count, accessIndices);
-    
+    std::cout << "-----------------------Fixed_Size_Allocation--------------------------------------\n";
+    fixed_Size_Allocation.run(fixed_Size_Allocation_Config.allocation_size, fixed_Size_Allocation_Config.iterations);
+    std::cout << "-----------------------Complex_Object_Allocation----------------------------------\n";
+    complex_Object_Allocation.run(complex_Object_Allocation_Config.iterations, complex_Object_Allocation_Config.element_count);
+    std::cout << "-----------------------Variable_Size_Allocation-----------------------------------\n";
+    allocationSizes = loadAllocationSizesFromFile(variable_Size_Allocation_Config.allocation_sizes_file);
+    variable_Size_Allocation.run(allocationSizes);
+    std::cout << "-----------------------Concurrent_Multithreaded_Allocation_Performance------------\n";
+    allocationSizes = loadAllocationSizesFromFile(concurrent_Multithreaded_Allocation_Performance_Config.allocation_sizes_file);
+    concurrent_Multithreaded_Allocation_Performance.run(allocationSizes, concurrent_Multithreaded_Allocation_Performance_Config.threads_num);
+    std::cout << "-----------------------Fragmentation_Test_Random_Allocation_Release---------------\n";
+    allocationSizes = loadAllocationSizesFromFile(fragmentation_Test_Random_Allocation_Release_Config.allocation_sizes_file);
+    freePatterns = loadFreePatternsFromFile(fragmentation_Test_Random_Allocation_Release_Config.free_patterns_file);
+    fragmentation_Test_Random_Allocation_Release.run(allocationSizes, freePatterns);
+    std::cout << "-----------------------Recursive_Memory_Allocation--------------------------------\n";
+    recursive_Memory_Allocation.run(recursive_Memory_Allocation_Config.depth, recursive_Memory_Allocation_Config.allocation_size);
     return 0;
 }
 

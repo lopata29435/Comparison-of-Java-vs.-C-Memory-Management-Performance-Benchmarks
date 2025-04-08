@@ -13,13 +13,6 @@ import java.util.*;
 
 
 public class BenchmarkRunner {
-
-    public static List<String> readLastNLines(String filePath, int n) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(filePath));
-        int size = lines.size();
-        return lines.subList(Math.max(size - n, 0), size);
-    }
-
     public static void main(String[] args) throws RunnerException {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));
@@ -27,72 +20,40 @@ public class BenchmarkRunner {
             e.printStackTrace();
         }
         try {
-            Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.txt");
-            List<String> lines;
+            System.out.println(System.getProperty("user.dir"));
+            Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.ini");
+ 
+            Fixed_Size_Allocation fixed_Size_Allocation = new Fixed_Size_Allocation();
+            BenchmarkConfig fixed_Size_Allocation_Config = configs.get("Fixed_Size_Allocation");
+            System.out.println("-----------------------Fixed_Size_Allocation--------------------------------------");
+            fixed_Size_Allocation.run(fixed_Size_Allocation_Config.iterations, fixed_Size_Allocation_Config.allocationSize);
 
-            ByteBench byteBench = new ByteBench();
-            BenchmarkConfig byteBenchConfig = configs.get("ByteBench");
-            System.out.println("-----------------------Byte Bench------------------------------------------");
-            byteBench.run(byteBenchConfig.iterations, byteBenchConfig.allocationSize);
-            lines = readLastNLines("ByteBenchmark_results.txt", 3);
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            Complex_Object_Allocation complex_Object_Allocation = new Complex_Object_Allocation();
+            BenchmarkConfig complex_Object_Allocation_Config = configs.get("Complex_Object_Allocation");
+            System.out.println("-----------------------Complex_Object_Allocation----------------------------------");
+            complex_Object_Allocation.run(complex_Object_Allocation_Config.iterations, complex_Object_Allocation_Config.elementCount);
 
-            ComplexObjectBench complexObjectBench = new ComplexObjectBench();
-            BenchmarkConfig complexObjectBenchConfig = configs.get("ComplexObjectBench");
-            System.out.println("-----------------------Complex Object Bench--------------------------------");
-            complexObjectBench.run(complexObjectBenchConfig.iterations, complexObjectBenchConfig.elementCount);
-            lines = readLastNLines("ComplexObjectBenchmark_results.txt", 3);
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            Variable_Size_Allocation variable_Size_Allocation = new Variable_Size_Allocation();
+            BenchmarkConfig variable_Size_Allocation_Config = configs.get("Variable_Size_Allocation");
+            System.out.println("-----------------------Variable_Size_Allocation-----------------------------------");
+            variable_Size_Allocation.run();
 
-            AllocatorBench allocatorBench = new AllocatorBench();
-            BenchmarkConfig allocatorBenchConfig = configs.get("AllocatorBench");
-            System.out.println("-----------------------Allocator Bench-------------------------------------");
-            allocatorBench.run();
-            lines = readLastNLines("AllocatorBench_results.txt", 2);
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            Concurrent_Multithreaded_Allocation_Performance concurrent_Multithreaded_Allocation_Performance = new Concurrent_Multithreaded_Allocation_Performance();
+            BenchmarkConfig concurrent_Multithreaded_Allocation_Performance_Config = configs.get("Concurrent_Multithreaded_Allocation_Performance");
+            System.out.println("-----------------------Concurrent_Multithreaded_Allocation_Performance------------");
+            concurrent_Multithreaded_Allocation_Performance.run();
 
-            AllocatorThreadBench allocatorThreadBench = new AllocatorThreadBench();
-            BenchmarkConfig allocatorThreadBenchConfig = configs.get("AllocatorThreadBench");
-            System.out.println("-----------------------Allocator Thread Bench------------------------------");
-            allocatorThreadBench.run();
-            lines = readLastNLines("AllocatorThreadBench_results.txt", 2);
-            for (String line : lines) {
-                System.out.println(line);
-            }
+            Fragmentation_Test_Random_Allocation_Release fragmentation_Test_Random_Allocation_Release = new Fragmentation_Test_Random_Allocation_Release();
+            BenchmarkConfig fragmentation_Test_Random_Allocation_Release_Config = configs.get("Fragmentation_Test_Random_Allocation_Release");
+            System.out.println("-----------------------Fragmentation_Test_Random_Allocation_Release---------------");
+            fragmentation_Test_Random_Allocation_Release.run();
 
-            MemoryFragmentationBench memoryFragmentationBench = new MemoryFragmentationBench();
-            BenchmarkConfig memoryFragmentationBenchConfig = configs.get("MemoryFragmentationBench");
-            System.out.println("-----------------------Memory Fragmentation Bench--------------------------");
-            memoryFragmentationBench.run();
-            lines = readLastNLines("MemoryFragmentationBench_results.txt", 2);
-            for (String line : lines) {
-                System.out.println(line);
-            }
-
-            RecursiveAllocationBench recursiveAllocationBench = new RecursiveAllocationBench();
-            BenchmarkConfig recursiveAllocationBenchConfig = configs.get("RecursiveAllocationBench");
-            System.out.println("-----------------------Recursive Allocation Bench--------------------------");
-            recursiveAllocationBench.run(recursiveAllocationBenchConfig.depth, recursiveAllocationBenchConfig.allocationSize);
-            lines = readLastNLines("RecursiveAllocationBenchmark_results.txt", 2);
-            for (String line : lines) {
-                System.out.println(line);
-            }
-
-            MemoryAccessBench memoryAccessBench = new MemoryAccessBench();
-            BenchmarkConfig memoryAccessBenchConfig = configs.get("MemoryAccessBench");
-            System.out.println("-----------------------Memory Access Bench---------------------------------");
-            memoryAccessBench.run();
-            lines = readLastNLines("MemoryAccessBench_results.txt", 2);
-            for (String line : lines) {
-                System.out.println(line);
-            }
-
+            Recursive_Memory_Allocation recursive_Memory_Allocation = new Recursive_Memory_Allocation();
+            BenchmarkConfig recursive_Memory_Allocation_Config = configs.get("Recursive_Memory_Allocation");
+            System.out.println("-----------------------Recursive_Memory_Allocation--------------------------------");
+            recursive_Memory_Allocation.run(recursive_Memory_Allocation_Config.depth, recursive_Memory_Allocation_Config.allocationSize);
+   
+            BenchmarkParser.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

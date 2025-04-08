@@ -5,6 +5,7 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.results.format.ResultFormatType;
 
 import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-Xmx16g", "-Xms4g", "-Xss16m"})
-public class RecursiveAllocationBench {
+public class Recursive_Memory_Allocation {
 
     @Param({"1000"}) 
     private long depth;
@@ -25,12 +26,9 @@ public class RecursiveAllocationBench {
 
     @Benchmark
     public void measureRecursiveAllocation() {
-        if (depth < 0 || allocationSize <= 0) {
-            throw new IllegalStateException("Depth and allocation size must be set before running the benchmark.");
-        }
-
         byte[] last = recursiveAllocation(depth, allocationSize);
         last = null;
+        System.gc();
     }
 
     private byte[] recursiveAllocation(long depth, long size) {
@@ -48,6 +46,7 @@ public class RecursiveAllocationBench {
         System.arraycopy(ptr, 0, child, 0, (int) size);
 
         ptr = null;
+        //System.gc();
         return child;
     }
 
@@ -57,7 +56,9 @@ public class RecursiveAllocationBench {
                 .param("depth", String.valueOf(depth))
                 .param("allocationSize", String.valueOf(allocationSize))
                 .forks(1)
-                .output("RecursiveAllocationBenchmark_results.txt")
+                .output("Buf.txt")
+                .result("Recursive_Memory_Allocation.json")
+                .resultFormat(ResultFormatType.JSON) 
                 .build();
 
         new Runner(opt).run();

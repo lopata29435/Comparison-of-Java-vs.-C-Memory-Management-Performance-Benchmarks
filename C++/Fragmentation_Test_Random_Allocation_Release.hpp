@@ -1,5 +1,5 @@
-#ifndef MEMORYFRAGMENTATIONBENCH_HPP
-#define MEMORYFRAGMENTATIONBENCH_HPP
+#ifndef FRAGMENTATION_TEST_RANDOM_ALLOCATION_RELEASE_HPP
+#define FRAGMENTATION_TEST_RANDOM_ALLOCATION_RELEASE_HPP
 
 #include <iostream>
 #include <vector>
@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 
-class MemoryFragmentationBench {
+class Fragmentation_Test_Random_Allocation_Release {
 public:
     void run(const std::vector<size_t>& allocationSizes, const std::vector<bool>& freePatterns) {
         if (allocationSizes.size() != freePatterns.size()) {
@@ -23,9 +23,9 @@ public:
         std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
 
         if (file.is_open()) {
-            file << "Memory fragmentation bench" << std::endl;
+            file << "Fragmentation Test Random Allocation Release" << std::endl;
             file << fragmentation_time << std::endl;
-            file << std::endl << std::endl;
+            file << std::endl;
         } else {
             std::cerr << "Failed to open the file for writing." << std::endl;
         }
@@ -35,12 +35,12 @@ public:
 
 private:
     double measure_fragmentation(const std::vector<size_t>& allocationSizes, const std::vector<bool>& freePatterns) {
-        std::vector<char*> allocations(allocationSizes.size(), nullptr);
+        std::vector<int8_t*> allocations(allocationSizes.size(), nullptr);
 
         auto start = std::chrono::high_resolution_clock::now();
 
         for (size_t i = 0; i < allocationSizes.size(); ++i) {
-            allocations[i] = new char[allocationSizes[i]];
+            allocations[i] = new int8_t[allocationSizes[i]];
 
             if (freePatterns[i]) {
                 delete[] allocations[i];
@@ -50,7 +50,7 @@ private:
 
         auto end = std::chrono::high_resolution_clock::now();
 
-        for (char* ptr : allocations) {
+        for (int8_t* ptr : allocations) {
             delete[] ptr;
         }
 
@@ -58,4 +58,4 @@ private:
     }
 };
 
-#endif // MEMORYFRAGMENTATIONBENCH_HPP
+#endif // FRAGMENTATION_TEST_RANDOM_ALLOCATION_RELEASE_HPP

@@ -9,10 +9,8 @@ REQUIRED_JAVA_VERSION := 21
 REQUIRED_GRADLE_VERSION := 8.12
 REQUIRED_CMAKE_VERSION := 3.31.5
 
-# Цель по умолчанию
 build: check_dependencies build_cpp build_java build_javaJMH
 
-# Проверка зависимостей
 check_dependencies:
 	@echo "Checking dependencies..."
 	@echo "Checking C++ compiler (clang++)..."
@@ -91,23 +89,20 @@ check_dependencies:
 
 	@echo "All dependencies are OK."
 
-# Сборка C++ части
 build_cpp:
 	@echo "Building C++ part..."
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake .. && cmake --build .
 
-# Сборка Java части
 build_java:
 	@echo "Building Java part..."
 	@cd $(JAVA_DIR) && gradle build
 
-# Сборка JavaJMH части
 build_javaJMH:
 	@echo "Building Java part..."
 	@cd JavaJMH && gradle shadowJar
 
-# Запуск бенчмарков
+
 run:
 	@echo "Running C++ benchmark..." | tee $(BENCHMARK_LOG)
 	@cd $(BUILD_DIR) && ./P1 | tee -a $(BENCHMARK_LOG)
@@ -120,14 +115,13 @@ run:
 	@cd JavaJMH/app && java -cp build/libs/app-all.jar org.example.BenchmarkRunner | tee -a $(BENCHMARK_LOG)
 	@echo "\nBenchmarks completed. Results saved in $(BENCHMARK_LOG)."
 
-# Очистка
 clean:
 	@echo "Cleaning up..."
 	@rm -rf $(BUILD_DIR)
 	@cd $(JAVA_DIR) && gradle clean
 	@rm -f $(BENCHMARK_LOG)
 
-# Полная очистка (включая репозиторий)
+
 distclean: clean
 	@echo "Removing repository..."
 	@rm -rf $(REPO_DIR)

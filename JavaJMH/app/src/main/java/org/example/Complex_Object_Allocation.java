@@ -5,18 +5,19 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.results.format.ResultFormatType;
 
 import java.util.concurrent.TimeUnit;
 
 class ComplexObject {
     private int size;
-    private int[] data;
+    private byte[] data;
 
     public ComplexObject(int size) {
         this.size = size;
-        this.data = new int[size];
+        this.data = new byte[size];
         for (int i = 0; i < size; ++i) {
-            data[i] = i;
+            data[i] = (byte) i;
         }
     }
 }
@@ -27,34 +28,31 @@ class ComplexObject {
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-Xmx16g", "-Xms4g", "-Xss8m"})
-public class ComplexObjectBench {
+public class Complex_Object_Allocation {
 
-    @Param({"1000"}) 
+    @Param({"10"}) 
     private int iterations;
-    @Param({"1000"}) 
+    @Param({"10"}) 
     private int complexSize;
 
-    @Benchmark
-    public void measureAllocatePrimitive() {
-        if (iterations <= 0) {
-            throw new IllegalStateException("Iterations must be set before running the benchmark.");
-        }
-
-        for (int i = 0; i < iterations; ++i) {
-            int[] ptr = new int[1];
-            ptr[0] = i;
-        }
-    }
+    private final int bufferSize = 10000;
+    private ComplexObject[] buffer = new ComplexObject[bufferSize];
+    int bufferIndex = 0;
 
     @Benchmark
     public void measureAllocateComplex() {
-        if (iterations <= 0 || complexSize <= 0) {
-            throw new IllegalStateException("Iterations and complexSize must be set before running the benchmark.");
-        }
-
         for (int i = 0; i < iterations; ++i) {
-            ComplexObject obj = new ComplexObject(complexSize);
+        buffer[bufferIndex] = new ComplexObject(complexSize);
+        bufferIndex++;
+        
+        if (bufferIndex >= bufferSize) {
+            for (int j = 0; j < bufferSize; j++) {
+                buffer[j] = null;
+            }
+            System.gc();
+            bufferIndex = 0;
         }
+    }
     }
 
     public void run(int iterations, int complexSize) throws RunnerException {
@@ -64,7 +62,9 @@ public class ComplexObjectBench {
                 .param("iterations", String.valueOf(iterations))
                 .param("complexSize", String.valueOf(complexSize))
                 .forks(1)
-                .output("ComplexObjectBenchmark_results.txt")
+                .output("Buf.txt")
+                .result("Complex_Object_Allocation.json")
+                .resultFormat(ResultFormatType.JSON) 
                 .build();
 
         new Runner(opt).run();

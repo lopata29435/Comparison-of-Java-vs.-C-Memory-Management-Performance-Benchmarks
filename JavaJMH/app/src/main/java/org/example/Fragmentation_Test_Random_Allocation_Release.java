@@ -5,6 +5,8 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.results.format.ResultFormatType;
+
 
 import java.util.List;
 import java.util.ArrayList;
@@ -18,53 +20,48 @@ import java.io.IOException;
 @Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1, jvmArgs = {"-Xmx16g", "-Xms4g", "-Xss8m"})
-public class MemoryFragmentationBench {
+public class Fragmentation_Test_Random_Allocation_Release {
 
     private List<Integer> allocationSizes;
     private List<Boolean> freePatterns;
+    private List<byte[]> allocations;
+    final int gcInterval = 1000; 
+    int gcCounter = 0;
 
     @Setup(Level.Trial)
     public void setup() throws IOException {
-        Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.txt");
-        BenchmarkConfig config = configs.get("MemoryFragmentationBench");
+        Map<String, BenchmarkConfig> configs = BenchmarkConfigLoader.loadConfig("../../benchmarks_config.ini");
+        BenchmarkConfig config = configs.get("Fragmentation_Test_Random_Allocation_Release");
 
         freePatterns = DataLoader.loadBooleanListFromFile(config.freePatternsFile);
         allocationSizes = DataLoader.loadIntegerListFromFile(config.allocationSizesFile);
-    }
 
-    @Benchmark
-    public double measureFragmentation() {
-        if (allocationSizes == null || freePatterns == null || allocationSizes.size() != freePatterns.size()) {
-            throw new IllegalStateException("Allocation sizes and free patterns must be set and have the same size.");
-        }
-
-        List<byte[]> allocations = new ArrayList<>(allocationSizes.size());
+        allocations = new ArrayList<>(allocationSizes.size());
         for (int i = 0; i < allocationSizes.size(); ++i) {
             allocations.add(null);
         }
+    }
 
-        long start = System.nanoTime();
-
+    @Benchmark
+    public void measureFragmentation() {
         for (int i = 0; i < allocationSizes.size(); ++i) {
             allocations.set(i, new byte[allocationSizes.get(i)]);
 
             if (freePatterns.get(i)) {
                 allocations.set(i, null);
+                System.gc();
             }
         }
-
-        long end = System.nanoTime();
-
-        System.gc();
-
-        return TimeUnit.NANOSECONDS.toMillis(end - start);
     }
+
 
     public void run() throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(this.getClass().getSimpleName() + ".measureFragmentation")
                 .forks(1)
-                .output("MemoryFragmentationBench_results.txt")
+                .output("Buf.txt")
+                .result("Fragmentation_Test_Random_Allocation_Release.json")
+                .resultFormat(ResultFormatType.JSON) 
                 .build();
         new Runner(opt).run();
     }

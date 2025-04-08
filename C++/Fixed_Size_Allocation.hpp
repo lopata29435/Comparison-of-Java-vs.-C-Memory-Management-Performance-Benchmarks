@@ -1,5 +1,5 @@
-#ifndef BYTEBENCH_HPP
-#define BYTEBENCH_HPP
+#ifndef FIXED_SIZE_ALLOCATION_HPP
+#define FIXED_SIZE_ALLOCATION_HPP
 
 #include <iostream>
 #include <vector>
@@ -10,7 +10,7 @@
 using Clock = std::chrono::high_resolution_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 
-class ByteBench {
+class Fixed_Size_Allocation {
 public:
     void run(size_t allocation_size, size_t iterations) {
         // Measure allocation and deallocation time in milliseconds.
@@ -24,12 +24,9 @@ public:
         std::ofstream file("CXX_Benchmark_results.txt", std::ios::app);
 
         if (file.is_open()) {
-            file << "Byte bench allocation" << std::endl;
+            file << "Fixed Size Allocation" << std::endl;
             file << allocation_time << std::endl;
-            file << std::endl << std::endl;
-            file << "Byte bench deallocation" << std::endl;
-            file << deallocation_time << std::endl;
-            file << std::endl << std::endl;
+            file << std::endl;
         } else {
             std::cerr << "Failed to open the file for writing." << std::endl;
         }
@@ -40,11 +37,11 @@ public:
 private:
     // Function to measure allocation time in milliseconds.
     double measure_allocation(size_t allocation_size, size_t iterations) {
-        std::vector<char*> allocations(iterations, nullptr);
+        std::vector<int8_t*> allocations(iterations, nullptr);
 
         TimePoint start = Clock::now();
         for (size_t i = 0; i < iterations; ++i) {
-            allocations[i] = new char[allocation_size];
+            allocations[i] = new int8_t[allocation_size];
         }
         TimePoint end = Clock::now();
 
@@ -59,9 +56,9 @@ private:
 
     // Function to measure deallocation time in milliseconds.
     double measure_deallocation(size_t allocation_size, size_t iterations) {
-        std::vector<char*> allocations(iterations, nullptr);
+        std::vector<int8_t*> allocations(iterations, nullptr);
         for (size_t i = 0; i < iterations; ++i) {
-            allocations[i] = new char[allocation_size];
+            allocations[i] = new int8_t[allocation_size];
         }
 
         TimePoint start = Clock::now();
@@ -75,4 +72,4 @@ private:
     }
 };
 
-#endif //BYTEBENCH_HPP
+#endif //FIXED_SIZE_ALLOCATION_HPP

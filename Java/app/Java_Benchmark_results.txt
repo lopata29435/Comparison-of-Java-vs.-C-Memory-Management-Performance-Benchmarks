@@ -25,3 +25,30 @@ Recursive allocation bench
 Memory access bench
 1.9262
 
+Byte bench allocation
+1961.0
+
+Byte bench deallocation
+385.0
+
+Primitive object bench allocation and deallocation
+2.0
+
+Complex object bench allocation and deallocation
+9798.0
+
+Allocator bench
+89
+
+Allocator thread bench
+1851
+
+Memory fragmentation bench
+1654.7672
+
+Recursive allocation bench
+929.6657
+
+Memory access bench
+1.2889
+

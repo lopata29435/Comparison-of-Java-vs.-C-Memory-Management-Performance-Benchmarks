@@ -4,8 +4,10 @@ build/
 .env
 .venv
 C++/build/
+C++/build/CXX_Benchmark_results.txt
 C++/.vscode/
 data/
+benchmark_results.md
 Java/app/benchmark_results_java.txt
 JavaJMH/app/benchmark_results_javajmh.txt
 C++/build/benchmark_results_cpp.txt
@@ -20,3 +22,5 @@ JavaJMH/app/MemoryAccessBench_results.txt
 JavaJMH/app/MemoryFragmentationBench_results.txt
 JavaJMH/app/RecursiveAllocationBenchmark_results.txt
 JavaJMH/app/AllocatorThreadBench_results.txt
+JavaJMH/app/Buf.txt
+JavaJMH/app/Java_Benchmark_results.txt
