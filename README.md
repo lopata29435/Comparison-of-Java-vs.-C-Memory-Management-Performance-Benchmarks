@@ -131,11 +131,11 @@ Benchmark for testing recursive memory allocation. Each iteration performs recur
 ## Latest Benchmarks results:
 | Benchmark | C++ | Java | Units |
 |-----------|------|------|-------|
-| Fixed Size Allocation | 4784.15 | 9462.7754 | ms |
-| Complex Object Allocation | 7713.28 | 20774.1422 | ms |
-| Variable Size Allocation | 955.549 | 157.153 | ms |
-| Concurrent Multithreaded Allocation Performance | 7984.73 | 5980.4542 | ms |
-| Fragmentation Test Random Allocation Release | 7028.75 | 18977.6814 | ms |
-| Recursive Memory Allocation | 8355.95 | 616.0121 | ms |
+| Fixed Size Allocation | 4502.77 | 5536.2137 | ms |
+| Complex Object Allocation | 8162.08 | 18685.6447 | ms |
+| Variable Size Allocation | 822.81 | 145.6871 | ms |
+| Concurrent Multithreaded Allocation Performance | 7088.08 | 5099.1015 | ms |
+| Fragmentation Test Random Allocation Release | 5738.97 | 18361.3798 | ms |
+| Recursive Memory Allocation | 13808.8 | 526.7277 | ms |
 
 ![Альтернативный текст](benchmark_chart.png "Benchmark results")
