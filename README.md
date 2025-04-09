@@ -129,13 +129,13 @@ Benchmark for simulating memory fragmentation. Includes testing of memory alloca
 Benchmark for testing recursive memory allocation. Each iteration performs recursive memory allocation with specified depth and size at each level.
 
 ## Latest Benchmarks results:
-| Benchmark | C++ | Java | Units |
-|-----------|------|------|-------|
-| Fixed Size Allocation | 4502.77 | 5536.2137 | ms |
-| Complex Object Allocation | 8162.08 | 18685.6447 | ms |
-| Variable Size Allocation | 822.81 | 145.6871 | ms |
-| Concurrent Multithreaded Allocation Performance | 7088.08 | 5099.1015 | ms |
-| Fragmentation Test Random Allocation Release | 5738.97 | 18361.3798 | ms |
-| Recursive Memory Allocation | 13808.8 | 526.7277 | ms |
+| Benchmark | C++ (ms) | Java (ms) | % Faster (Java vs C++) |
+|-----------|-----------|-----------|--------------------------|
+| Fixed Size Allocation | 4502.77 | 5536.21 | -22.95% |
+| Complex Object Allocation | 8162.08 | 18685.64 | -128.93% |
+| Variable Size Allocation | 822.81 | 145.69 | 82.29% |
+| Concurrent Multithreaded Allocation Performance | 7088.08 | 5099.10 | 28.06% |
+| Fragmentation Test Random Allocation Release | 5738.97 | 18361.38 | -219.94% |
+| Recursive Memory Allocation | 13808.80 | 526.73 | 96.19% |
 
 ![Альтернативный текст](benchmark_chart.png "Benchmark results")

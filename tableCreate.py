@@ -23,7 +23,6 @@ def parse_benchmark(file_path, language):
     
     return benchmarks
 
-
 def merge_benchmarks(*benchmark_dicts):
     merged = {}
     for bench_dict in benchmark_dicts:
@@ -32,18 +31,37 @@ def merge_benchmarks(*benchmark_dicts):
                 merged[bench] = {}
             merged[bench].update(times)
     return merged
+
+def format_float(val):
+    return f"{val:.2f}"
+
+def compute_percentage_faster(cpp_time, java_time):
+    if cpp_time and java_time:
+        try:
+            return ((cpp_time - java_time) / cpp_time) * 100
+        except ZeroDivisionError:
+            return 0.0
+    return 0.0
+
 def generate_markdown(benchmarks, output_file):
-    languages = ['C++', 'Java']
-    
     with open(output_file, 'w', encoding='utf-8') as file:
-        file.write("| Benchmark | C++ | Java | Units |\n")
-        file.write("|-----------|------|------|-------|\n")
+        file.write("| Benchmark | C++ (ms) | Java (ms) | % Faster (Java vs C++) |\n")
+        file.write("|-----------|-----------|-----------|--------------------------|\n")
+        
         for benchmark, times in benchmarks.items():
-            c_plus_plus_time = times.get('C++', 'N/A')
-            java_time = times.get('Java', 'N/A')
+            cpp_time = times.get('C++')
+            java_time = times.get('Java')
 
-            file.write(f"| {benchmark} | {c_plus_plus_time} | {java_time} | ms |\n")
+            cpp_str = format_float(cpp_time) if cpp_time is not None else 'N/A'
+            java_str = format_float(java_time) if java_time is not None else 'N/A'
 
+            if cpp_time is not None and java_time is not None:
+                percent = compute_percentage_faster(cpp_time, java_time)
+                percent_str = format_float(percent)
+            else:
+                percent_str = 'N/A'
+
+            file.write(f"| {benchmark} | {cpp_str} | {java_str} | {percent_str}% |\n")
 
 def generate_chart(benchmarks, output_file):
     languages = ['C++', 'Java']

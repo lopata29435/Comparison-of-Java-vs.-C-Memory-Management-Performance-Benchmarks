@@ -46,7 +46,6 @@ public class Fragmentation_Test_Random_Allocation_Release {
     public void measureFragmentation() {
         for (int i = 0; i < allocationSizes.size(); ++i) {
             allocations.set(i, new byte[allocationSizes.get(i)]);
-
             if (freePatterns.get(i)) {
                 allocations.set(i, null);
                 System.gc();
