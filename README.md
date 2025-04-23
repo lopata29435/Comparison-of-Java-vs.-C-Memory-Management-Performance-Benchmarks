@@ -25,6 +25,12 @@ In brackets are the versions on which I built all this, so everything works exac
 git clone https://github.com/lopata29435/Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks.git
 cd Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks/
 ```
+
+### Step 1.5 Check dependencies(if you want to)
+```bash
+make check
+```
+
 ### Step 2: Build Makefile
 ```bash
 make build
