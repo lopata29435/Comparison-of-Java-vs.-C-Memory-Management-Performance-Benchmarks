@@ -9,7 +9,9 @@ REQUIRED_JAVA_VERSION := 21
 REQUIRED_GRADLE_VERSION := 8.12
 REQUIRED_CMAKE_VERSION := 3.31.5
 
-build: check_dependencies build_cpp build_java build_javaJMH
+check: check_dependencies
+
+build: build_cpp build_javaJMH
 
 check_dependencies:
 	@echo "Checking dependencies..."
@@ -47,8 +49,15 @@ check_dependencies:
 		exit 1; \
 	else \
 		GRADLE_VERSION=$$(gradle --version | grep Gradle | awk '{print $$2}'); \
-		if [ "$$GRADLE_VERSION" != "$(REQUIRED_GRADLE_VERSION)" ]; then \
-			echo "Error: Gradle version $$GRADLE_VERSION is installed, but version $(REQUIRED_GRADLE_VERSION) is required."; \
+		GRADLE_MAJOR=$$(echo $$GRADLE_VERSION | cut -d'.' -f1); \
+		GRADLE_MINOR=$$(echo $$GRADLE_VERSION | cut -d'.' -f2); \
+		GRADLE_PATCH=$$(echo $$GRADLE_VERSION | cut -d'.' -f3); \
+		REQUIRED_MAJOR=8; \
+		REQUIRED_MINOR=12; \
+		REQUIRED_PATCH_MIN=0; \
+		REQUIRED_PATCH_MAX=5; \
+		if [ $$GRADLE_MAJOR -ne $$REQUIRED_MAJOR ] || { [ $$GRADLE_MINOR -lt $$REQUIRED_MINOR ] || { [ $$GRADLE_MINOR -eq $$REQUIRED_MINOR ] && [ $$GRADLE_PATCH -lt $$REQUIRED_PATCH_MIN ]; } } || { [ $$GRADLE_MINOR -eq $$REQUIRED_MINOR ] && [ $$GRADLE_PATCH -gt $$REQUIRED_PATCH_MAX ]; }; then \
+			echo "Error: Gradle version $$GRADLE_VERSION is installed, but version 8.12.x is required (from 8.12 to 8.12.5)."; \
 			exit 1; \
 		else \
 			echo "Gradle version $$GRADLE_VERSION is OK."; \
@@ -94,10 +103,6 @@ build_cpp:
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake .. && cmake --build .
 
-build_java:
-	@echo "Building Java part..."
-	@cd $(JAVA_DIR) && gradle build
-
 build_javaJMH:
 	@echo "Building Java part..."
 	@cd JavaJMH && gradle shadowJar
@@ -108,10 +113,6 @@ run:
 	@cd $(BUILD_DIR) && ./P1 | tee -a $(BENCHMARK_LOG)
 
 	@echo "\nRunning Java benchmark..." | tee -a $(BENCHMARK_LOG)
-	@cd Java/app && java -cp build/libs/app.jar org.example.BenchmarkRunner | tee -a $(BENCHMARK_LOG)
-	@echo "\nBenchmarks completed. Results saved in $(BENCHMARK_LOG)."
-
-	@echo "\nRunning JavaJMH benchmark..." | tee -a $(BENCHMARK_LOG)
 	@cd JavaJMH/app && java -cp build/libs/app-all.jar org.example.BenchmarkRunner | tee -a $(BENCHMARK_LOG)
 	@echo "\nBenchmarks completed. Results saved in $(BENCHMARK_LOG)."
 
