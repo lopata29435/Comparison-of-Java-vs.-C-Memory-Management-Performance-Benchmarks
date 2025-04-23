@@ -25,6 +25,12 @@
 git clone https://github.com/lopata29435/Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks.git
 cd Comparison-of-Java-vs.-C-Memory-Management-Performance-Benchmarks/
 ```
+
+### Шаг 1.5 Проверка зависимостей(Если вам это нужно)
+```bash
+make check
+```
+
 ### Шаг 2: Сборка проекта
 ```bash
 make build
